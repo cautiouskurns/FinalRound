@@ -8,6 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
+import DiffMatchPatch from 'diff-match-patch'
 
 interface Question {
   question: string
@@ -35,6 +36,28 @@ interface Topic {
 interface Subject {
   name: string
   topics: Topic[]
+}
+
+// Add this new function outside of the component
+function compareAnswers(userAnswer: string, correctAnswer: string) {
+  const dmp = new DiffMatchPatch()
+  const diff = dmp.diff_main(userAnswer, correctAnswer)
+  dmp.diff_cleanupSemantic(diff)
+
+  return diff.map(([operation, text], index) => {
+    let className = ''
+    switch (operation) {
+      case 1: // Insertion (in correct answer)
+        className = 'bg-green-200'
+        break
+      case -1: // Deletion (in user answer)
+        className = 'bg-red-200'
+        break
+      default: // No change
+        className = ''
+    }
+    return <span key={index} className={className}>{text}</span>
+  })
 }
 
 export function InterviewSimulation() {
@@ -170,14 +193,14 @@ export function InterviewSimulation() {
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
                 <h3 className="font-bold mb-2">Your Answer:</h3>
-                <div className="bg-gray-100 p-4 rounded">
-                  {userAnswer}
+                <div className="bg-gray-100 p-4 rounded whitespace-pre-wrap">
+                  {compareAnswers(userAnswer, currentQuestion.answer)}
                 </div>
               </div>
               <div>
                 <h3 className="font-bold mb-2">Correct Answer:</h3>
-                <div className="bg-gray-100 p-4 rounded">
-                  {currentQuestion.answer}
+                <div className="bg-gray-100 p-4 rounded whitespace-pre-wrap">
+                  {compareAnswers(currentQuestion.answer, userAnswer)}
                 </div>
               </div>
             </div>
