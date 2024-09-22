@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { ChevronDown, ChevronRight } from "lucide-react"
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 interface Question {
   question: string
@@ -13,6 +14,8 @@ interface Question {
 interface Concept {
   name: string
   details: string
+  code?: string
+  codeExample?: string  // Add this line
   questions: Question[]
 }
 
@@ -78,86 +81,86 @@ export function Syllabus() {
   return (
     <div className="container mx-auto">
       <h2 className="text-2xl font-bold mb-4">Interview Syllabus</h2>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-1/6">Subject</TableHead>
-            <TableHead className="w-1/6">Topic</TableHead>
-            <TableHead className="w-1/6">Concept</TableHead>
-            <TableHead className="w-1/3">Details</TableHead>
-            <TableHead className="w-1/3">Questions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {syllabusData.map(subject => (
-            <>
-              <TableRow key={subject.name}>
-                <TableCell>
-                  <Button
-                    variant="ghost"
-                    onClick={() => toggleSubject(subject.name)}
-                    className="flex items-center p-0"
-                  >
-                    {expandedSubjects.has(subject.name) ? <ChevronDown className="mr-2 h-4 w-4" /> : <ChevronRight className="mr-2 h-4 w-4" />}
-                    {subject.name}
-                  </Button>
-                </TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-              {expandedSubjects.has(subject.name) && subject.topics.map(topic => (
-                <>
-                  <TableRow key={topic.name}>
-                    <TableCell></TableCell>
-                    <TableCell>
-                      <Button
-                        variant="ghost"
-                        onClick={() => toggleTopic(topic.name)}
-                        className="flex items-center p-0"
-                      >
-                        {expandedTopics.has(topic.name) ? <ChevronDown className="mr-2 h-4 w-4" /> : <ChevronRight className="mr-2 h-4 w-4" />}
-                        {topic.name}
-                      </Button>
-                    </TableCell>
-                    <TableCell></TableCell>
-                    <TableCell>{topic.details}</TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                  {expandedTopics.has(topic.name) && topic.concepts.map(concept => (
-                    <>
-                      <TableRow key={concept.name}>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell>
-                          <Button
-                            variant="ghost"
-                            onClick={() => toggleConcept(concept.name)}
-                            className="flex items-center p-0"
-                          >
-                            {expandedConcepts.has(concept.name) ? <ChevronDown className="mr-2 h-4 w-4" /> : <ChevronRight className="mr-2 h-4 w-4" />}
-                            {concept.name}
-                          </Button>
-                        </TableCell>
-                        <TableCell>{concept.details}</TableCell>
-                        <TableCell>
-                          {expandedConcepts.has(concept.name) && concept.questions.map((question, index) => (
-                            <div key={index}>
-                              <strong>Q:</strong> {question.question}<br />
-                              <strong>A:</strong> {question.answer}<br />
-                            </div>
-                          ))}
-                        </TableCell>
-                      </TableRow>
-                    </>
-                  ))}
-                </>
-              ))}
-            </>
-          ))}
-        </TableBody>
-      </Table>
+      <div className="grid grid-cols-12 gap-4 font-bold mb-2 border-b pb-2">
+        <div className="col-span-1">Subject</div>
+        <div className="col-span-1">Topic</div>
+        <div className="col-span-2">Concept</div>
+        <div className="col-span-5">Details</div>
+        <div className="col-span-3">Questions</div>
+      </div>
+      <div className="space-y-2">
+        {syllabusData.map(subject => (
+          <div key={subject.name} className="space-y-2">
+            <div className="grid grid-cols-12 gap-4 items-start py-2 border-b">
+              <div className="col-span-1">
+                <Button
+                  variant="ghost"
+                  onClick={() => toggleSubject(subject.name)}
+                  className="flex items-center p-0"
+                >
+                  {expandedSubjects.has(subject.name) ? <ChevronDown className="mr-2 h-4 w-4" /> : <ChevronRight className="mr-2 h-4 w-4" />}
+                  {subject.name}
+                </Button>
+              </div>
+              <div className="col-span-11"></div>
+            </div>
+            {expandedSubjects.has(subject.name) && subject.topics.map(topic => (
+              <div key={topic.name} className="space-y-2 ml-4">
+                <div className="grid grid-cols-12 gap-4 items-start py-2 border-b">
+                  <div className="col-span-1"></div>
+                  <div className="col-span-1">
+                    <Button
+                      variant="ghost"
+                      onClick={() => toggleTopic(topic.name)}
+                      className="flex items-center p-0"
+                    >
+                      {expandedTopics.has(topic.name) ? <ChevronDown className="mr-2 h-4 w-4" /> : <ChevronRight className="mr-2 h-4 w-4" />}
+                      {topic.name}
+                    </Button>
+                  </div>
+                  <div className="col-span-2"></div>
+                  <div className="col-span-5">{topic.details}</div>
+                  <div className="col-span-3"></div>
+                </div>
+                {expandedTopics.has(topic.name) && topic.concepts.map(concept => (
+                  <div key={concept.name} className="space-y-2 ml-4">
+                    <div className="grid grid-cols-12 gap-4 items-start py-2 border-b">
+                      <div className="col-span-1"></div>
+                      <div className="col-span-1"></div>
+                      <div className="col-span-2">
+                        <Button
+                          variant="ghost"
+                          onClick={() => toggleConcept(concept.name)}
+                          className="flex items-center p-0"
+                        >
+                          {expandedConcepts.has(concept.name) ? <ChevronDown className="mr-2 h-4 w-4" /> : <ChevronRight className="mr-2 h-4 w-4" />}
+                          {concept.name}
+                        </Button>
+                      </div>
+                      <div className="col-span-5">
+                        <p>{concept.details}</p>
+                        {concept.codeExample && (
+                          <SyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2">
+                            {concept.codeExample}
+                          </SyntaxHighlighter>
+                        )}
+                      </div>
+                      <div className="col-span-3">
+                        {expandedConcepts.has(concept.name) && concept.questions.map((question, index) => (
+                          <div key={index} className="mb-2">
+                            <strong>Q:</strong> {question.question}<br />
+                            <strong>A:</strong> {question.answer}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

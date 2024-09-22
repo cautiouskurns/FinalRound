@@ -1,25 +1,145 @@
 [
   {
+    "name": "Python",
+    "topics": [
+      {
+        "name": "Basic Python Syntax",
+        "details": "Fundamental concepts of Python programming",
+        "concepts": [
+          {
+            "name": "Indentation and code blocks",
+            "details": "Python uses indentation to define code blocks.",
+            "questions": [
+              {
+                "question": "What is the significance of indentation in Python?",
+                "answer": "Indentation is used to define code blocks in Python, such as in functions, loops, and conditional statements."
+              },
+              {
+                "question": "How many spaces are typically used for indentation in Python?",
+                "answer": "4 spaces are commonly used for indentation, although the exact number is not enforced by the language."
+              }
+            ],
+            "codeExample": "def greet(name):\n    print(f'Hello, {name}!')\n    if name == 'Alice':\n        print('Welcome back, Alice!')\n\ngreet('Bob')\ngreet('Alice')"
+          },
+          {
+            "name": "Variables and assignment",
+            "details": "How to declare and assign values to variables in Python.",
+            "questions": [
+              {
+                "question": "Explain the difference between '=' and '==' in Python.",
+                "answer": "'=' is used for assignment, while '==' is used for comparison."
+              },
+              {
+                "question": "What is variable naming convention in Python?",
+                "answer": "Variable names should be lowercase, with words separated by underscores as necessary to improve readability (snake_case)."
+              }
+            ],
+            "codeExample": "x = 5\ny = 10\nresult = x == y\nprint(f'Is x equal to y? {result}')"
+          }
+        ]
+      },
+      {
+        "name": "Control Flow",
+        "details": "Structures that control the flow of execution in Python",
+        "concepts": [
+          {
+            "name": "if, elif, else statements",
+            "details": "Conditional statements in Python",
+            "questions": [
+              {
+                "question": "Write a Python if-elif-else statement to classify a person's age group.",
+                "answer": "Here's an example:\nage = 25\nif age < 18:\n    print('Minor')\nelif age < 65:\n    print('Adult')\nelse:\n    print('Senior')"
+              },
+              {
+                "question": "What is the purpose of the 'elif' statement in Python?",
+                "answer": "'elif' is short for 'else if'. It allows you to check multiple conditions after the initial 'if' statement."
+              }
+            ],
+            "codeExample": "score = 85\nif score >= 90:\n    grade = 'A'\nelif score >= 80:\n    grade = 'B'\nelif score >= 70:\n    grade = 'C'\nelse:\n    grade = 'F'\nprint(f'Your grade is: {grade}')"
+          },
+          {
+            "name": "for loops",
+            "details": "Iterating over sequences in Python",
+            "questions": [
+              {
+                "question": "How can you iterate over a list using a for loop in Python?",
+                "answer": "Example: for item in my_list:\n    print(item)"
+              },
+              {
+                "question": "How can you use the range() function in a for loop?",
+                "answer": "The range() function can be used to generate a sequence of numbers. Example: for i in range(5):\n    print(i)"
+              }
+            ],
+            "codeExample": "fruits = ['apple', 'banana', 'cherry']\nfor fruit in fruits:\n    print(f'I like {fruit}')\n\nfor i in range(1, 5):\n    print(f'{i} squared is {i**2}')"
+          }
+        ]
+      },
+      {
+        "name": "Data Structures",
+        "details": "Built-in data structures in Python",
+        "concepts": [
+          {
+            "name": "Lists",
+            "details": "Ordered, mutable sequences",
+            "questions": [
+              {
+                "question": "How do you add an item to the end of a list in Python?",
+                "answer": "You can use the append() method. Example: my_list.append(new_item)"
+              },
+              {
+                "question": "What is list slicing in Python?",
+                "answer": "List slicing is a way to access a range of elements in a list. Syntax: list[start:end:step]"
+              }
+            ],
+            "codeExample": "numbers = [1, 2, 3, 4, 5]\nnumbers.append(6)\nprint(numbers)\nprint(numbers[1:4])\nprint(numbers[::-1])  # Reverse the list"
+          },
+          {
+            "name": "Dictionaries",
+            "details": "Key-value pairs",
+            "questions": [
+              {
+                "question": "How do you access a value in a dictionary?",
+                "answer": "You can access a value using its key. Example: my_dict['key']"
+              },
+              {
+                "question": "What happens if you try to access a key that doesn't exist in a dictionary?",
+                "answer": "It raises a KeyError. You can use the get() method to provide a default value instead."
+              }
+            ],
+            "codeExample": "person = {'name': 'Alice', 'age': 30, 'city': 'New York'}\nprint(person['name'])\nprint(person.get('job', 'Not specified'))\n\nfor key, value in person.items():\n    print(f'{key}: {value}')"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "JavaScript",
     "topics": [
       {
-        "name": "Basics",
-        "details": "Fundamental concepts of JavaScript programming",
+        "name": "ES6+ Features",
+        "details": "Modern JavaScript features",
         "concepts": [
           {
-            "name": "Variables",
-            "details": "Declaring and using variables",
+            "name": "Arrow Functions",
+            "details": "Concise syntax for writing function expressions",
             "questions": [
-              { "question": "What is a variable?", "answer": "A variable is a container for storing data values." },
-              { "question": "How do you declare a variable in JavaScript?", "answer": "Using var, let, or const keywords." }
-            ]
+              {
+                "question": "What is the difference between regular functions and arrow functions in JavaScript?",
+                "answer": "Arrow functions have a more concise syntax and do not bind their own 'this' value."
+              }
+            ],
+            "codeExample": "// Regular function\nfunction add(a, b) {\n  return a + b;\n}\n\n// Arrow function\nconst multiply = (a, b) => a * b;\n\nconsole.log(add(2, 3));\nconsole.log(multiply(4, 5));"
           },
           {
-            "name": "Data Types",
-            "details": "Understanding different data types in JavaScript",
+            "name": "Destructuring",
+            "details": "Extracting values from arrays or properties from objects",
             "questions": [
-              { "question": "What are the different data types in JavaScript?", "answer": "String, Number, Boolean, Object, Undefined, Null, Symbol, BigInt." }
-            ]
+              {
+                "question": "How can you use destructuring to swap two variables in JavaScript?",
+                "answer": "You can use array destructuring: [a, b] = [b, a]"
+              }
+            ],
+            "codeExample": "const person = { name: 'Alice', age: 30 };\nconst { name, age } = person;\nconsole.log(name, age);\n\nconst colors = ['red', 'green', 'blue'];\nconst [firstColor, secondColor] = colors;\nconsole.log(firstColor, secondColor);"
           }
         ]
       }

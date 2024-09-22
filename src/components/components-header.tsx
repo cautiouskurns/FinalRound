@@ -1,10 +1,14 @@
-'use client'
+import { Zap, UserCircle } from 'lucide-react'
 
 export function Header() {
   return (
-    <header className="bg-primary text-primary-foreground p-4">
-      <div className="container mx-auto">
-        <h1 className="text-2xl font-bold">FinalRound</h1>
+    <header className="flex items-center justify-between h-14 px-4 border-b shrink-0 md:px-6 bg-black text-white">
+      <div className="flex items-center gap-2">
+        <Zap className="h-6 w-6 text-primary" />
+        <span className="text-lg font-semibold">FinalRound</span>
+      </div>
+      <div>
+        <UserCircle className="h-6 w-6 cursor-pointer" />
       </div>
     </header>
   )
