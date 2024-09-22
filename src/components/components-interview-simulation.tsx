@@ -7,39 +7,58 @@ import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 interface Question {
-  id: number
-  text: string
-  topic: string
-  hint: string
+  question: string
   answer: string
+  hint: string // Add this line
 }
 
-const questions: Question[] = [
-  {
-    id: 1,
-    text: 'What is a closure in JavaScript?',
-    topic: 'JavaScript',
-    hint: 'Think about function scope and variable access.',
-    answer: 'A closure is a function that has access to variables in its outer (enclosing) lexical scope, even after the outer function has returned.'
-  },
-  {
-    id: 2,
-    text: 'Explain the difference between props and state in React.',
-    topic: 'React',
-    hint: 'Consider data flow and mutability.',
-    answer: 'Props are read-only data passed from parent to child components, while state is mutable data managed within a component.'
-  }
-]
+interface Concept {
+  name: string
+  details: string
+  questions: Question[]
+}
+
+interface Topic {
+  name: string
+  details: string
+  concepts: Concept[]
+}
+
+interface Subject {
+  name: string
+  topics: Topic[]
+}
 
 export function InterviewSimulation() {
-  const [currentQuestion, setCurrentQuestion] = useState<Question>(questions[0])
+  const [questions, setQuestions] = useState<Question[]>([])
+  const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null)
   const [userAnswer, setUserAnswer] = useState('')
   const [showHint, setShowHint] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
   const [score, setScore] = useState(0)
 
+  useEffect(() => {
+    fetch('/data/syllabus.json')
+      .then(response => response.json())
+      .then(data => {
+        const allQuestions = data.flatMap((subject: Subject) =>
+          subject.topics.flatMap((topic: Topic) =>
+            topic.concepts.flatMap((concept: Concept) =>
+              concept.questions.map((question: Question) => ({
+                ...question,
+                hint: concept.details // Assuming hint is the concept details
+              }))
+            )
+          )
+        )
+        setQuestions(allQuestions)
+        setCurrentQuestion(allQuestions[0])
+      })
+  }, [])
+
   const handleNextQuestion = () => {
-    const nextIndex = questions.findIndex(q => q.id === currentQuestion.id) + 1
+    const currentIndex = questions.findIndex(q => q.question === currentQuestion?.question)
+    const nextIndex = currentIndex + 1
     if (nextIndex < questions.length) {
       setCurrentQuestion(questions[nextIndex])
       setUserAnswer('')
@@ -62,12 +81,16 @@ export function InterviewSimulation() {
     }
   }, [showAnswer])
 
+  if (!currentQuestion) {
+    return <div>Loading...</div>
+  }
+
   return (
     <div className="container mx-auto">
       <h2 className="text-2xl font-bold mb-4">Interview Simulation</h2>
       <Card>
         <CardHeader>
-          <CardTitle>{currentQuestion.text}</CardTitle>
+          <CardTitle>{currentQuestion.question}</CardTitle>
         </CardHeader>
         <CardContent>
           <Textarea
