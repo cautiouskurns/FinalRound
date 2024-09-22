@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -69,6 +69,18 @@ export function InterviewSimulation() {
   const [score, setScore] = useState(0)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [userTextAnswer, setUserTextAnswer] = useState('')
+  const [userCodeAnswer, setUserCodeAnswer] = useState('')
+  const [isTextSubmitted, setIsTextSubmitted] = useState(false)
+  const [isCodeSubmitted, setIsCodeSubmitted] = useState(false)
+
+  const handleSubmitText = useCallback(() => {
+    setIsTextSubmitted(true)
+  }, [])
+
+  const handleSubmitCode = useCallback(() => {
+    setIsCodeSubmitted(true)
+  }, [])
 
   useEffect(() => {
     fetch('/data/syllabus.json')
@@ -171,12 +183,26 @@ export function InterviewSimulation() {
           )}
         </CardHeader>
         <CardContent>
-          <Textarea
-            className="mb-4"
-            placeholder="Type your answer here..."
-            value={userAnswer}
-            onChange={(e) => setUserAnswer(e.target.value)}
-          />
+          <div className="mb-4">
+            <label className="block mb-2 font-bold">Text Answer:</label>
+            <Textarea
+              className="mb-2 h-64" // 4 times taller
+              value={userTextAnswer}
+              onChange={(e) => setUserTextAnswer(e.target.value)}
+            />
+            <Button onClick={handleSubmitText}>Submit Answer</Button>
+          </div>
+          
+          <div className="mb-4">
+            <label className="block mb-2 font-bold">Code Answer:</label>
+            <Textarea
+              className="mb-2 h-64 bg-gray-800 text-white font-mono" // 4 times taller, darker background
+              value={userCodeAnswer}
+              onChange={(e) => setUserCodeAnswer(e.target.value)}
+            />
+            <Button onClick={handleSubmitCode}>Submit Code</Button>
+          </div>
+
           <div className="flex space-x-4 mb-4">
             <Button onClick={handleSubmit}>Submit Answer</Button>
             <Button onClick={handleShowHint}>Show Hint</Button>
@@ -217,6 +243,44 @@ export function InterviewSimulation() {
                 )}
               </AlertDescription>
             </Alert>
+          )}
+          {isTextSubmitted && (
+            <div className="mb-4">
+              <h3 className="font-bold mb-2">Text Answer Comparison:</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-semibold">Your Answer:</h4>
+                  <div className="bg-gray-100 p-4 rounded whitespace-pre-wrap">
+                    {compareAnswers(userTextAnswer, currentQuestion.answer)}
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-semibold">Correct Answer:</h4>
+                  <div className="bg-gray-100 p-4 rounded whitespace-pre-wrap">
+                    {compareAnswers(currentQuestion.answer, userTextAnswer)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {isCodeSubmitted && currentQuestion.answerCode && (
+            <div className="mb-4">
+              <h3 className="font-bold mb-2">Code Answer Comparison:</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-semibold">Your Code:</h4>
+                  <SyntaxHighlighter language="javascript" style={vscDarkPlus}>
+                    {compareAnswers(userCodeAnswer, currentQuestion.answerCode)}
+                  </SyntaxHighlighter>
+                </div>
+                <div>
+                  <h4 className="font-semibold">Correct Code:</h4>
+                  <SyntaxHighlighter language="javascript" style={vscDarkPlus}>
+                    {compareAnswers(currentQuestion.answerCode, userCodeAnswer)}
+                  </SyntaxHighlighter>
+                </div>
+              </div>
+            </div>
           )}
         </CardContent>
       </Card>
