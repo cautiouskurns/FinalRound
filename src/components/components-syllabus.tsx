@@ -8,7 +8,9 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 interface Question {
   question: string
+  questionCode?: string
   answer: string
+  answerCode?: string
 }
 
 interface Concept {
@@ -147,9 +149,20 @@ export function Syllabus() {
                       </div>
                       <div className="col-span-3">
                         {expandedConcepts.has(concept.name) && concept.questions.map((question, index) => (
-                          <div key={index} className="mb-2">
-                            <strong>Q:</strong> {question.question}<br />
+                          <div key={index} className="mb-4">
+                            <strong>Q:</strong> {question.question}
+                            {question.questionCode && (
+                              <SyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2 text-sm">
+                                {question.questionCode}
+                              </SyntaxHighlighter>
+                            )}
+                            <br />
                             <strong>A:</strong> {question.answer}
+                            {question.answerCode && (
+                              <SyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2 text-sm">
+                                {question.answerCode}
+                              </SyntaxHighlighter>
+                            )}
                           </div>
                         ))}
                       </div>

@@ -5,11 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 interface Question {
   question: string
+  questionCode?: string
   answer: string
-  hint: string // Add this line
+  answerCode?: string
+  hint: string
 }
 
 interface Concept {
@@ -91,6 +95,11 @@ export function InterviewSimulation() {
       <Card>
         <CardHeader>
           <CardTitle>{currentQuestion.question}</CardTitle>
+          {currentQuestion.questionCode && (
+            <SyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2">
+              {currentQuestion.questionCode}
+            </SyntaxHighlighter>
+          )}
         </CardHeader>
         <CardContent>
           <Textarea
@@ -113,7 +122,14 @@ export function InterviewSimulation() {
           {showAnswer && (
             <Alert className="mb-4">
               <AlertTitle>Answer</AlertTitle>
-              <AlertDescription>{currentQuestion.answer}</AlertDescription>
+              <AlertDescription>
+                {currentQuestion.answer}
+                {currentQuestion.answerCode && (
+                  <SyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2">
+                    {currentQuestion.answerCode}
+                  </SyntaxHighlighter>
+                )}
+              </AlertDescription>
             </Alert>
           )}
         </CardContent>

@@ -12,7 +12,9 @@
             "questions": [
               {
                 "question": "What is the significance of indentation in Python?",
-                "answer": "Indentation is used to define code blocks in Python, such as in functions, loops, and conditional statements."
+                "answer": "Indentation is used to define code blocks in Python, such as in functions, loops, and conditional statements.",
+                "questionCode": "def greet(name):\nprint(f'Hello, {name}!')\n    if name == 'Alice':\n    print('Welcome back, Alice!')\n\ngreet('Bob')\ngreet('Alice')",
+                "answerCode": "def greet(name):\n    print(f'Hello, {name}!')\n    if name == 'Alice':\n        print('Welcome back, Alice!')\n\ngreet('Bob')\ngreet('Alice')"
               },
               {
                 "question": "How many spaces are typically used for indentation in Python?",
@@ -27,7 +29,9 @@
             "questions": [
               {
                 "question": "Explain the difference between '=' and '==' in Python.",
-                "answer": "'=' is used for assignment, while '==' is used for comparison."
+                "answer": "'=' is used for assignment, while '==' is used for comparison.",
+                "questionCode": "x = 5\ny = 5\nprint(x = y)  # What will this do?\nprint(x == y)  # What will this do?",
+                "answerCode": "x = 5\ny = 5\n# print(x = y)  # This would cause a SyntaxError\nprint(x == y)  # This will print: True"
               },
               {
                 "question": "What is variable naming convention in Python?",
@@ -125,7 +129,9 @@
             "questions": [
               {
                 "question": "What is the difference between regular functions and arrow functions in JavaScript?",
-                "answer": "Arrow functions have a more concise syntax and do not bind their own 'this' value."
+                "answer": "Arrow functions have a more concise syntax and do not bind their own 'this' value.",
+                "questionCode": "// Regular function\nfunction greet(name) {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\n// Arrow function\nconst greetArrow = (name) => {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\nconst person = { title: 'Mr.' };\ngreet.call(person, 'John');\ngreetArrow.call(person, 'John');",
+                "answerCode": "// Output:\n// Hello, Mr. John\n// Hello, undefined John\n\n// The regular function's 'this' is set to the 'person' object\n// The arrow function's 'this' remains the global object (or undefined in strict mode)"
               }
             ],
             "codeExample": "// Regular function\nfunction add(a, b) {\n  return a + b;\n}\n\n// Arrow function\nconst multiply = (a, b) => a * b;\n\nconsole.log(add(2, 3));\nconsole.log(multiply(4, 5));"
