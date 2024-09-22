@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { ChevronDown, ChevronRight } from "lucide-react"
@@ -21,62 +21,16 @@ interface Subject {
   topics: Topic[]
 }
 
-const syllabusData: Subject[] = [
-  {
-    name: 'JavaScript',
-    topics: [
-      {
-        name: 'Basics',
-        details: 'Fundamental concepts of JavaScript programming',
-        concepts: [
-          { name: 'Variables', details: 'Declaring and using variables' },
-          { name: 'Data Types', details: 'Understanding different data types in JavaScript' },
-          { name: 'Functions', details: 'Creating and using functions' },
-          { name: 'Objects', details: 'Working with JavaScript objects' }
-        ]
-      },
-      {
-        name: 'Advanced',
-        details: 'Advanced JavaScript concepts and features',
-        concepts: [
-          { name: 'Closures', details: 'Understanding and using closures' },
-          { name: 'Promises', details: 'Working with asynchronous operations using Promises' },
-          { name: 'Async/Await', details: 'Using async/await for asynchronous programming' },
-          { name: 'ES6+ Features', details: 'Modern JavaScript features introduced in ES6 and beyond' }
-        ]
-      }
-    ]
-  },
-  {
-    name: 'React',
-    topics: [
-      {
-        name: 'Fundamentals',
-        details: 'Core concepts of React',
-        concepts: [
-          { name: 'Components', details: 'Creating and using React components' },
-          { name: 'JSX', details: 'Writing JSX syntax' },
-          { name: 'Props', details: 'Passing and using props in components' },
-          { name: 'State', details: 'Managing component state' }
-        ]
-      },
-      {
-        name: 'Hooks',
-        details: 'Using React Hooks for state and side effects',
-        concepts: [
-          { name: 'useState', details: 'Managing state in functional components' },
-          { name: 'useEffect', details: 'Handling side effects in components' },
-          { name: 'useContext', details: 'Using React Context with hooks' },
-          { name: 'Custom Hooks', details: 'Creating and using custom hooks' }
-        ]
-      }
-    ]
-  }
-]
-
 export function Syllabus() {
+  const [syllabusData, setSyllabusData] = useState<Subject[]>([])
   const [expandedSubjects, setExpandedSubjects] = useState<Set<string>>(new Set())
   const [expandedTopics, setExpandedTopics] = useState<Set<string>>(new Set())
+
+  useEffect(() => {
+    fetch('/data/syllabus.json')
+      .then(response => response.json())
+      .then(data => setSyllabusData(data))
+  }, [])
 
   const toggleSubject = (subjectName: string) => {
     setExpandedSubjects(prev => {
