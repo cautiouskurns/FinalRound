@@ -5,14 +5,15 @@ import Link from 'next/link'
 import { Header } from '@/components/components-header'
 import { InterviewSimulation } from '@/components/components-interview-simulation'
 import { Syllabus } from '@/components/components-syllabus'
-import { Home, BookOpen, MessageSquare, Settings } from 'lucide-react'
+import { Dashboard } from '@/components/Dashboard'
+import { Home, BookOpen, MessageSquare, Settings, LayoutDashboard } from 'lucide-react'
 
 // Placeholder components for Home and Settings
 const HomePage = () => <div>Home Page Content</div>
 const SettingsPage = () => <div>Settings Page Content</div>
 
 export default function Page() {
-  const [activeTab, setActiveTab] = useState<'home' | 'interview' | 'syllabus' | 'settings'>('home')
+  const [activeTab, setActiveTab] = useState<'home' | 'interview' | 'syllabus' | 'settings' | 'dashboard'>('home')
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -53,6 +54,16 @@ export default function Page() {
 
             <Link
               href="#"
+              onClick={() => setActiveTab('dashboard')}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition-all hover:text-primary 
+                ${activeTab === 'dashboard' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
+            >
+              <LayoutDashboard className="h-4 w-4" />
+              Dashboard
+            </Link>
+
+            <Link
+              href="#"
               onClick={() => setActiveTab('settings')}
               className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition-all hover:text-primary 
                 ${activeTab === 'settings' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
@@ -67,6 +78,7 @@ export default function Page() {
           {activeTab === 'home' && <HomePage />}
           {activeTab === 'interview' && <InterviewSimulation />}
           {activeTab === 'syllabus' && <Syllabus />}
+          {activeTab === 'dashboard' && <Dashboard />}
           {activeTab === 'settings' && <SettingsPage />}
         </main>
       </div>
