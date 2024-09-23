@@ -33,13 +33,43 @@ interface ConceptTopicPageProps {
 
 export function ConceptTopicPage({ item, onClose, onBack }: ConceptTopicPageProps) {
   const isTopic = 'concepts' in item;
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedName, setEditedName] = useState(item.name);
+  const [editedDetails, setEditedDetails] = useState(item.details);
+
+  const handleSave = () => {
+    // Here you would typically update the item in your data store
+    item.name = editedName;
+    item.details = editedDetails;
+    setIsEditing(false);
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-5xl w-full max-h-[90vh] overflow-y-auto">
         <Button onClick={onClose} className="mb-4">Close</Button>
-        <h1 className="text-2xl font-bold mb-4">{item.name}</h1>
-        <p className="mb-4">{item.details}</p>
+        {isEditing ? (
+          <>
+            <Input
+              value={editedName}
+              onChange={(e) => setEditedName(e.target.value)}
+              className="text-2xl font-bold mb-4"
+            />
+            <Textarea
+              value={editedDetails}
+              onChange={(e) => setEditedDetails(e.target.value)}
+              className="mb-4"
+            />
+            <Button onClick={handleSave} className="mr-2">Save</Button>
+            <Button onClick={() => setIsEditing(false)} variant="outline">Cancel</Button>
+          </>
+        ) : (
+          <>
+            <h1 className="text-2xl font-bold mb-4">{item.name}</h1>
+            <p className="mb-4">{item.details}</p>
+            <Button onClick={() => setIsEditing(true)} className="mb-4">Edit</Button>
+          </>
+        )}
 
         {isTopic ? (
           <TopicContent topic={item as Topic} />
@@ -78,22 +108,14 @@ function TopicContent({ topic }: { topic: Topic }) {
 
 function ConceptContent({ concept }: { concept: Concept }) {
   const [questions, setQuestions] = useState<Question[]>(concept.questions || []);
-  const [newQuestion, setNewQuestion] = useState('');
-  const [newAnswer, setNewAnswer] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  const addQuestion = () => {
-    if (newQuestion && newAnswer) {
-      setQuestions([...questions, { question: newQuestion, answer: newAnswer }]);
-      setNewQuestion('');
-      setNewAnswer('');
-    }
-  };
-
-  const removeQuestion = (index: number) => {
-    setQuestions(questions.filter((_, i) => i !== index));
+  const openAddDialog = () => {
+    setEditingQuestion({ question: '', answer: '' });
+    setEditingIndex(null);
+    setIsDialogOpen(true);
   };
 
   const openEditDialog = (question: Question, index: number) => {
@@ -102,15 +124,25 @@ function ConceptContent({ concept }: { concept: Concept }) {
     setIsDialogOpen(true);
   };
 
-  const saveEditedQuestion = () => {
-    if (editingQuestion && editingIndex !== null) {
-      const updatedQuestions = [...questions];
-      updatedQuestions[editingIndex] = editingQuestion;
-      setQuestions(updatedQuestions);
+  const saveQuestion = () => {
+    if (editingQuestion) {
+      if (editingIndex !== null) {
+        // Edit existing question
+        const updatedQuestions = [...questions];
+        updatedQuestions[editingIndex] = editingQuestion;
+        setQuestions(updatedQuestions);
+      } else {
+        // Add new question
+        setQuestions([...questions, editingQuestion]);
+      }
       setIsDialogOpen(false);
       setEditingQuestion(null);
       setEditingIndex(null);
     }
+  };
+
+  const removeQuestion = (index: number) => {
+    setQuestions(questions.filter((_, i) => i !== index));
   };
 
   return (
@@ -127,7 +159,7 @@ function ConceptContent({ concept }: { concept: Concept }) {
       <div>
         <h2 className="text-xl font-semibold mb-2">Questions</h2>
         <Table>
-          <TableCaption>Questions and Answers for {concept.name}</TableCaption>
+          {/* <TableCaption>Questions and Answers for {concept.name}</TableCaption> */}
           <TableHeader>
             <TableRow>
               <TableHead className="w-[40%]">Question</TableHead>
@@ -146,6 +178,11 @@ function ConceptContent({ concept }: { concept: Concept }) {
                 </TableCell>
               </TableRow>
             ))}
+            <TableRow>
+              <TableCell colSpan={3}>
+                <Button onClick={openAddDialog} variant="outline" size="sm" className="w-full">Add Question</Button>
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </div>
@@ -153,9 +190,9 @@ function ConceptContent({ concept }: { concept: Concept }) {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[850px] w-11/12 max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-800">
           <DialogHeader>
-            <DialogTitle>Edit Question</DialogTitle>
+            <DialogTitle>{editingIndex !== null ? 'Edit' : 'Add'} Question</DialogTitle>
             <DialogDescription>
-              Make changes to the question and answer here. Click save when you're done.
+              {editingIndex !== null ? 'Make changes to' : 'Enter'} the question and answer here. Click save when you're done.
             </DialogDescription>
           </DialogHeader>
           {editingQuestion && (
@@ -185,24 +222,10 @@ function ConceptContent({ concept }: { concept: Concept }) {
             </div>
           )}
           <DialogFooter>
-            <Button onClick={saveEditedQuestion}>Save changes</Button>
+            <Button onClick={saveQuestion}>Save changes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      
-      <div className="space-y-2">
-        <Input
-          placeholder="New question"
-          value={newQuestion}
-          onChange={(e) => setNewQuestion(e.target.value)}
-        />
-        <Textarea
-          placeholder="Answer"
-          value={newAnswer}
-          onChange={(e) => setNewAnswer(e.target.value)}
-        />
-        <Button onClick={addQuestion}>Add Question</Button>
-      </div>
     </div>
   );
 }
