@@ -7,31 +7,31 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { motion, AnimatePresence } from 'framer-motion'
+import { useRouter } from 'next/navigation';
 
-interface Question {
-  question: string
-  questionCode?: string
-  answer: string
-  answerCode?: string
+export interface Concept {
+  name: string;
+  details: string;
+  codeExample?: string;
+  questions?: Question[];
 }
 
-interface Concept {
-  name: string
-  details: string
-  code?: string
-  codeExample?: string
-  questions: Question[]
+export interface Topic { // Ensure Topic is exported
+  concepts: Concept[];
+  name: string;
+  details: string;
 }
 
-interface Topic {
-  name: string
-  details: string
-  concepts: Concept[]
-}
-
-interface Subject {
+export interface Subject {
   name: string
   topics: Topic[]
+}
+
+export interface Question {
+  question: string;
+  answer: string;
+  questionCode?: string;
+  answerCode?: string;
 }
 
 export function Syllabus() {
@@ -39,6 +39,7 @@ export function Syllabus() {
   const [selectedSubject, setSelectedSubject] = useState<string>('')
   const [expandedTopics, setExpandedTopics] = useState<Set<string>>(new Set())
   const [expandedConcepts, setExpandedConcepts] = useState<Set<string>>(new Set())
+  const router = useRouter();
 
   useEffect(() => {
     fetch('/data/syllabus.json')
@@ -76,13 +77,11 @@ export function Syllabus() {
   }
 
   const navigateToTopicPage = (topic: Topic) => {
-    // Implement navigation to topic page
-    console.log("Navigate to topic page:", topic.name);
+    router.push(`/concept-topic/${encodeURIComponent(topic.name)}`);
   }
 
   const navigateToConceptPage = (concept: Concept) => {
-    // Implement navigation to concept page
-    console.log("Navigate to concept page:", concept.name);
+    router.push(`/concept-topic/${encodeURIComponent(concept.name)}`);
   }
 
   const selectedSubjectData = syllabusData.find(subject => subject.name === selectedSubject)
@@ -188,7 +187,7 @@ export function Syllabus() {
                         )}
                       </div>
                       <div className="col-span-3">
-                        {expandedConcepts.has(concept.name) && concept.questions.map((question, index) => (
+                        {expandedConcepts.has(concept.name) && concept.questions?.map((question, index) => (
                           <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 10 }}
