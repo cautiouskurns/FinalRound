@@ -1,44 +1,46 @@
-import React, { useEffect, useState } from 'react'; // {{ edit_1 }} Import useState
-import { motion } from 'framer-motion'; // {{ edit_1 }} Import motion
-import { Concept, Topic } from './components-syllabus';
+import React, { useState } from 'react';
+import { Concept, Topic, Question } from './components-syllabus';
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { ScrollArea } from "@/components/ui/scroll-area"; // {{ edit_1 }} Import ScrollArea
 
 interface ConceptTopicPageProps {
   item: Concept | Topic;
   onClose: () => void;
-  onBack: () => void; // {{ edit_1 }} Add this line
+  onBack: () => void;
 }
 
 export function ConceptTopicPage({ item, onClose, onBack }: ConceptTopicPageProps) {
-  const [isVisible, setIsVisible] = useState(false);
   const isTopic = 'concepts' in item;
 
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
   return (
-    <motion.div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-      initial={{ opacity: 0 }} // {{ edit_2 }} Initial state
-      animate={{ opacity: 1 }} // {{ edit_3 }} Animate to this state
-      exit={{ opacity: 0 }} // {{ edit_4 }} Exit state
-      transition={{ duration: 0.3 }} // {{ edit_5 }} Transition duration
-    >
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-5xl w-full max-h-[220vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-5xl w-full max-h-[90vh]"> {/* Increased padding */}
         <Button onClick={onClose} className="mb-4">Close</Button>
         <h1 className="text-2xl font-bold mb-4">{item.name}</h1>
         <p className="mb-4">{item.details}</p>
 
-        {isTopic ? (
-          <TopicContent topic={item as Topic} />
-        ) : (
-          <ConceptContent concept={item as Concept} />
-        )}
+        <ScrollArea className="h-[70vh]"> {/* {{ edit_2 }} Added ScrollArea */}
+          {isTopic ? (
+            <TopicContent topic={item as Topic} />
+          ) : (
+            <ConceptContent concept={item as Concept} />
+          )}
+        </ScrollArea>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -46,43 +48,93 @@ function TopicContent({ topic }: { topic: Topic }) {
   return (
     <div>
       <h2 className="text-xl font-semibold mb-2">Concepts</h2>
-      {topic.concepts.map((concept, index) => (
-        <div key={index} className="mb-4">
-          <h3 className="text-lg font-semibold">{concept.name}</h3>
-          <p>{concept.details}</p>
-          {concept.codeExample && (
-            <SyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2">
-              {concept.codeExample}
-            </SyntaxHighlighter>
-          )}
-        </div>
-      ))}
+      <Table>
+        <TableCaption>List of concepts for {topic.name}</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[200px]">Concept</TableHead>
+            <TableHead>Details</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {topic.concepts.map((concept, index) => (
+            <TableRow key={index}>
+              <TableCell className="font-medium">{concept.name}</TableCell>
+              <TableCell>{concept.details}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }
 
 function ConceptContent({ concept }: { concept: Concept }) {
+  const [questions, setQuestions] = useState<Question[]>(concept.questions || []);
+  const [newQuestion, setNewQuestion] = useState('');
+  const [newAnswer, setNewAnswer] = useState('');
+
+  const addQuestion = () => {
+    if (newQuestion && newAnswer) {
+      setQuestions([...questions, { question: newQuestion, answer: newAnswer }]);
+      setNewQuestion('');
+      setNewAnswer('');
+    }
+  };
+
+  const removeQuestion = (index: number) => {
+    setQuestions(questions.filter((_, i) => i !== index));
+  };
+
   return (
-    <div>
+    <div className="space-y-6">
       {concept.codeExample && (
-        <div className="mb-4">
+        <div>
           <h2 className="text-xl font-semibold mb-2">Code Example</h2>
-          <SyntaxHighlighter language="javascript" style={vscDarkPlus}>
+          <SyntaxHighlighter language="javascript" style={vscDarkPlus} className="rounded-md">
             {concept.codeExample}
           </SyntaxHighlighter>
         </div>
       )}
-      {concept.questions && concept.questions.length > 0 && (
-        <>
-          <h2 className="text-xl font-semibold mb-2">Questions</h2>
-          {concept.questions.map((question, index) => (
-            <div key={index} className="mb-4">
-              <p className="font-semibold">Q: {question.question}</p>
-              <p className="mt-2">A: {question.answer}</p>
-            </div>
-          ))}
-        </>
-      )}
+      
+      <div>
+        <h2 className="text-xl font-semibold mb-2">Questions</h2>
+        <Table>
+          <TableCaption>Questions and Answers for {concept.name}</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[40%]">Question</TableHead>
+              <TableHead className="w-[40%]">Answer</TableHead>
+              <TableHead className="w-[20%]">Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {questions.map((q, index) => (
+              <TableRow key={index}>
+                <TableCell>{q.question}</TableCell>
+                <TableCell>{q.answer}</TableCell>
+                <TableCell>
+                  <Button onClick={() => removeQuestion(index)} variant="destructive" size="sm">Remove</Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      
+      <div className="space-y-2">
+        <Input
+          placeholder="New question"
+          value={newQuestion}
+          onChange={(e) => setNewQuestion(e.target.value)}
+        />
+        <Textarea
+          placeholder="Answer"
+          value={newAnswer}
+          onChange={(e) => setNewAnswer(e.target.value)}
+        />
+        <Button onClick={addQuestion}>Add Question</Button>
+      </div>
     </div>
   );
 }
