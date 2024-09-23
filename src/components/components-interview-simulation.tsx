@@ -9,6 +9,8 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 import DiffMatchPatch from 'diff-match-patch'
+import { ErrorBoundary } from 'react-error-boundary'
+import ReactDOMServer from 'react-dom/server'
 
 interface Question {
   question: string
@@ -38,7 +40,42 @@ interface Subject {
   topics: Topic[]
 }
 
-// Add this new function outside of the component
+function DiffView({ userAnswer, correctAnswer, language = 'text' }: { userAnswer: string, correctAnswer: string, language?: string }) {
+  const dmp = new DiffMatchPatch()
+  const diff = dmp.diff_main(userAnswer, correctAnswer)
+  dmp.diff_cleanupSemantic(diff)
+
+  const colorCodedDiff = diff.map(([operation, text], index) => {
+    let className = ''
+    switch (operation) { 
+      case 1: // Insertion (in correct answer)
+        className = 'bg-green-200 text-green-800'
+        break
+      case -1: // Deletion (in user answer)
+        className = 'bg-red-200 text-red-800'
+        break
+      default: // No change
+        className = ''
+    }
+    return <span key={index} className={className}>{text}</span>
+  })
+
+  if (language === 'javascript') {
+    return (
+      <div className="relative">
+        <SyntaxHighlighter language="javascript" style={vscDarkPlus}>
+          {userAnswer}
+        </SyntaxHighlighter>
+        <div className="absolute top-0 left-0 right-0 bottom-0 overflow-auto pointer-events-none">
+          <pre className="font-mono text-transparent bg-transparent">{colorCodedDiff}</pre>
+        </div>
+      </div>
+    )
+  }
+
+  return <div className="bg-gray-100 p-4 rounded whitespace-pre-wrap">{colorCodedDiff}</div>
+}
+
 function compareAnswers(userAnswer: string, correctAnswer: string) {
   const dmp = new DiffMatchPatch()
   const diff = dmp.diff_main(userAnswer, correctAnswer)
@@ -48,16 +85,32 @@ function compareAnswers(userAnswer: string, correctAnswer: string) {
     let className = ''
     switch (operation) {
       case 1: // Insertion (in correct answer)
-        className = 'bg-green-200'
+        className = 'bg-green-200 text-green-800'
         break
       case -1: // Deletion (in user answer)
-        className = 'bg-red-200'
+        className = 'bg-red-200 text-red-800'
         break
       default: // No change
         className = ''
     }
     return <span key={index} className={className}>{text}</span>
   })
+}
+
+function ErrorFallback({error}: {error: Error}) {
+  return <div>Error rendering code: {error.message}</div>
+}
+
+function SafeSyntaxHighlighter({ children, ...props }: React.PropsWithChildren<any>) {
+  if (typeof children !== 'string') {
+    console.error('Invalid input to SyntaxHighlighter:', children)
+    return <pre>{JSON.stringify(children, null, 2)}</pre>
+  }
+  return (
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <SyntaxHighlighter {...props}>{children}</SyntaxHighlighter>
+    </ErrorBoundary>
+  )
 }
 
 export function InterviewSimulation() {
@@ -177,9 +230,9 @@ export function InterviewSimulation() {
         <CardHeader>
           <CardTitle>{currentQuestion.question}</CardTitle>
           {currentQuestion.questionCode && (
-            <SyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2">
-              {currentQuestion.questionCode}
-            </SyntaxHighlighter>
+            <SafeSyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2">
+              {currentQuestion.questionCode || ''}
+            </SafeSyntaxHighlighter>
           )}
         </CardHeader>
         <CardContent>
@@ -237,9 +290,9 @@ export function InterviewSimulation() {
               <AlertDescription>
                 {currentQuestion.answer}
                 {currentQuestion.answerCode && (
-                  <SyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2">
-                    {currentQuestion.answerCode}
-                  </SyntaxHighlighter>
+                  <SafeSyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2">
+                    {currentQuestion.answerCode || ''}
+                  </SafeSyntaxHighlighter>
                 )}
               </AlertDescription>
             </Alert>
@@ -250,15 +303,11 @@ export function InterviewSimulation() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h4 className="font-semibold">Your Answer:</h4>
-                  <div className="bg-gray-100 p-4 rounded whitespace-pre-wrap">
-                    {compareAnswers(userTextAnswer, currentQuestion.answer)}
-                  </div>
+                  <DiffView userAnswer={userTextAnswer} correctAnswer={currentQuestion.answer} />
                 </div>
                 <div>
                   <h4 className="font-semibold">Correct Answer:</h4>
-                  <div className="bg-gray-100 p-4 rounded whitespace-pre-wrap">
-                    {compareAnswers(currentQuestion.answer, userTextAnswer)}
-                  </div>
+                  <DiffView userAnswer={currentQuestion.answer} correctAnswer={userTextAnswer} />
                 </div>
               </div>
             </div>
@@ -269,15 +318,11 @@ export function InterviewSimulation() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h4 className="font-semibold">Your Code:</h4>
-                  <SyntaxHighlighter language="javascript" style={vscDarkPlus}>
-                    {compareAnswers(userCodeAnswer, currentQuestion.answerCode)}
-                  </SyntaxHighlighter>
+                  <DiffView userAnswer={userCodeAnswer} correctAnswer={currentQuestion.answerCode} language="javascript" />
                 </div>
                 <div>
                   <h4 className="font-semibold">Correct Code:</h4>
-                  <SyntaxHighlighter language="javascript" style={vscDarkPlus}>
-                    {compareAnswers(currentQuestion.answerCode, userCodeAnswer)}
-                  </SyntaxHighlighter>
+                  <DiffView userAnswer={currentQuestion.answerCode} correctAnswer={userCodeAnswer} language="javascript" />
                 </div>
               </div>
             </div>
