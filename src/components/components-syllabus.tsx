@@ -7,7 +7,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { motion, AnimatePresence } from 'framer-motion'
-import { useRouter } from 'next/navigation';
+import { ConceptTopicPage } from './ConceptTopicPage'; // Make sure to create this component
 
 export interface Concept {
   name: string;
@@ -39,7 +39,7 @@ export function Syllabus() {
   const [selectedSubject, setSelectedSubject] = useState<string>('')
   const [expandedTopics, setExpandedTopics] = useState<Set<string>>(new Set())
   const [expandedConcepts, setExpandedConcepts] = useState<Set<string>>(new Set())
-  const router = useRouter();
+  const [selectedItem, setSelectedItem] = useState<Topic | Concept | null>(null);
 
   useEffect(() => {
     fetch('/data/syllabus.json')
@@ -77,11 +77,11 @@ export function Syllabus() {
   }
 
   const navigateToTopicPage = (topic: Topic) => {
-    router.push(`/concept-topic/${encodeURIComponent(topic.name)}`);
+    setSelectedItem(topic);
   }
 
   const navigateToConceptPage = (concept: Concept) => {
-    router.push(`/concept-topic/${encodeURIComponent(concept.name)}`);
+    setSelectedItem(concept);
   }
 
   const selectedSubjectData = syllabusData.find(subject => subject.name === selectedSubject)
@@ -112,11 +112,10 @@ export function Syllabus() {
           </motion.div>
         </SelectContent>
       </Select>
-      <div className="grid grid-cols-11 gap-4 font-bold mb-2 border-b pb-2">
-        <div className="col-span-1">Topic</div>
-        <div className="col-span-2">Concept</div>
-        <div className="col-span-5">Details</div>
-        <div className="col-span-3">Questions</div>
+      <div className="grid grid-cols-12 gap-4 font-semibold mb-2 border-b pb-2">
+        <div className="col-span-3 text-lg">Topic</div>
+        <div className="col-span-3 text-lg">Concept</div>
+        <div className="col-span-6 text-lg">Details</div>
       </div>
       <div className="space-y-2">
         <AnimatePresence>
@@ -129,8 +128,8 @@ export function Syllabus() {
               transition={{ duration: 0.3 }}
               className="space-y-2"
             >
-              <div className="grid grid-cols-11 gap-4 items-start py-2 border-b">
-                <div className="col-span-1 flex items-center">
+              <div className="grid grid-cols-12 gap-4 items-start py-2 border-b">
+                <div className="col-span-3 flex items-center">
                   <Button
                     variant="ghost"
                     onClick={() => toggleTopic(topic.name)}
@@ -141,14 +140,13 @@ export function Syllabus() {
                   <Button
                     variant="ghost"
                     onClick={() => navigateToTopicPage(topic)}
-                    className="p-0"
+                    className="p-0 text-base font-semibold"
                   >
                     {topic.name}
                   </Button>
                 </div>
-                <div className="col-span-2"></div>
-                <div className="col-span-5">{topic.details}</div>
                 <div className="col-span-3"></div>
+                <div className="col-span-6 text-base">{topic.details}</div>
               </div>
               <AnimatePresence>
                 {expandedTopics.has(topic.name) && topic.concepts.map(concept => (
@@ -160,57 +158,19 @@ export function Syllabus() {
                     transition={{ duration: 0.3 }}
                     className="space-y-2 ml-4"
                   >
-                    <div className="grid grid-cols-11 gap-4 items-start py-2 border-b">
-                      <div className="col-span-1"></div>
-                      <div className="col-span-2 flex items-center">
-                        <Button
-                          variant="ghost"
-                          onClick={() => toggleConcept(concept.name)}
-                          className="p-1 mr-2"
-                        >
-                          {expandedConcepts.has(concept.name) ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-                        </Button>
+                    <div className="grid grid-cols-12 gap-4 items-start py-2 border-b">
+                      <div className="col-span-3"></div>
+                      <div className="col-span-3">
                         <Button
                           variant="ghost"
                           onClick={() => navigateToConceptPage(concept)}
-                          className="p-0"
+                          className="p-0 text-base font-semibold"
                         >
                           {concept.name}
                         </Button>
                       </div>
-                      <div className="col-span-5">
+                      <div className="col-span-6 text-base">
                         <p>{concept.details}</p>
-                        {concept.codeExample && (
-                          <SyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2">
-                            {concept.codeExample}
-                          </SyntaxHighlighter>
-                        )}
-                      </div>
-                      <div className="col-span-3">
-                        {expandedConcepts.has(concept.name) && concept.questions?.map((question, index) => (
-                          <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.2 }}
-                            className="mb-4"
-                          >
-                            <strong>Q:</strong> {question.question}
-                            {question.questionCode && (
-                              <SyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2 text-sm">
-                                {question.questionCode}
-                              </SyntaxHighlighter>
-                            )}
-                            <br />
-                            <strong>A:</strong> {question.answer}
-                            {question.answerCode && (
-                              <SyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2 text-sm">
-                                {question.answerCode}
-                              </SyntaxHighlighter>
-                            )}
-                          </motion.div>
-                        ))}
                       </div>
                     </div>
                   </motion.div>
@@ -220,6 +180,13 @@ export function Syllabus() {
           ))}
         </AnimatePresence>
       </div>
+      {selectedItem && (
+        <ConceptTopicPage
+          item={selectedItem}
+          onClose={() => setSelectedItem(null)}
+          onBack={() => setSelectedItem(null)} // Add the onBack prop here
+        />
+      )}
     </motion.div>
   )
 }

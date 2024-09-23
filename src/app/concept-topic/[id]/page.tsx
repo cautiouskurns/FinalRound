@@ -38,5 +38,5 @@ export default function ConceptTopicPageWrapper() {
     return <div>Loading...</div>;
   }
 
-  return <ConceptTopicPage item={item} onBack={handleBack} />;
+  return <ConceptTopicPage item={item} onBack={handleBack} onClose={handleBack} />;
 }
