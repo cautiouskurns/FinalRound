@@ -75,6 +75,16 @@ export function Syllabus() {
     })
   }
 
+  const navigateToTopicPage = (topic: Topic) => {
+    // Implement navigation to topic page
+    console.log("Navigate to topic page:", topic.name);
+  }
+
+  const navigateToConceptPage = (concept: Concept) => {
+    // Implement navigation to concept page
+    console.log("Navigate to concept page:", concept.name);
+  }
+
   const selectedSubjectData = syllabusData.find(subject => subject.name === selectedSubject)
 
   return (
@@ -89,19 +99,19 @@ export function Syllabus() {
         <SelectTrigger className="w-[180px] mb-4">
           <SelectValue placeholder="Select a subject" />
         </SelectTrigger>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <SelectContent>
+        <SelectContent>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
             {syllabusData.map(subject => (
               <SelectItem key={subject.name} value={subject.name}>
                 {subject.name}
               </SelectItem>
             ))}
-          </SelectContent>
-        </motion.div>
+          </motion.div>
+        </SelectContent>
       </Select>
       <div className="grid grid-cols-11 gap-4 font-bold mb-2 border-b pb-2">
         <div className="col-span-1">Topic</div>
@@ -121,13 +131,19 @@ export function Syllabus() {
               className="space-y-2"
             >
               <div className="grid grid-cols-11 gap-4 items-start py-2 border-b">
-                <div className="col-span-1">
+                <div className="col-span-1 flex items-center">
                   <Button
                     variant="ghost"
                     onClick={() => toggleTopic(topic.name)}
-                    className="flex items-center p-0"
+                    className="p-1 mr-2"
                   >
-                    {expandedTopics.has(topic.name) ? <ChevronDown className="mr-2 h-4 w-4" /> : <ChevronRight className="mr-2 h-4 w-4" />}
+                    {expandedTopics.has(topic.name) ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() => navigateToTopicPage(topic)}
+                    className="p-0"
+                  >
                     {topic.name}
                   </Button>
                 </div>
@@ -147,13 +163,19 @@ export function Syllabus() {
                   >
                     <div className="grid grid-cols-11 gap-4 items-start py-2 border-b">
                       <div className="col-span-1"></div>
-                      <div className="col-span-2">
+                      <div className="col-span-2 flex items-center">
                         <Button
                           variant="ghost"
                           onClick={() => toggleConcept(concept.name)}
-                          className="flex items-center p-0"
+                          className="p-1 mr-2"
                         >
-                          {expandedConcepts.has(concept.name) ? <ChevronDown className="mr-2 h-4 w-4" /> : <ChevronRight className="mr-2 h-4 w-4" />}
+                          {expandedConcepts.has(concept.name) ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          onClick={() => navigateToConceptPage(concept)}
+                          className="p-0"
+                        >
                           {concept.name}
                         </Button>
                       </div>
