@@ -1,11 +1,14 @@
 'use client'
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, Suspense } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { User, Bot } from 'lucide-react'
+import { Canvas } from '@react-three/fiber'
+import { OrbitControls } from '@react-three/drei'
+import { InterviewerAvatar } from './InterviewerAvatar'
+import { Scene } from './scene'
 
 interface Message {
   text: string;
@@ -78,20 +81,17 @@ const SpeechToText: React.FC = () => {
   }, [recognition, transcript])
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
+    <Card className="w-full max-w-6xl mx-auto"> {/* Increased max-width */}
       <CardHeader>
         <CardTitle className="text-2xl font-bold">Interview Simulation</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex gap-4">
-          <div className="w-1/4">
-            <Avatar className="w-32 h-32 mx-auto">
-              <AvatarImage src="/placeholder-avatar.png" alt="Interviewer" />
-              <AvatarFallback>AI</AvatarFallback>
-            </Avatar>
+        <div className="flex flex-col md:flex-row gap-4"> {/* Changed to column layout on small screens */}
+          <div className="w-full md:w-1/2 h-[600px]"> {/* Increased width and height */}
+            <Scene />
           </div>
-          <div className="w-3/4">
-            <ScrollArea className="h-[400px] border rounded-md p-4">
+          <div className="w-full md:w-1/2"> {/* Adjusted width */}
+            <ScrollArea className="h-[600px] border rounded-md p-4"> {/* Increased height */}
               {conversation.map((message, index) => (
                 <div key={index} className={`flex items-start mb-4 ${message.isUser ? 'justify-end' : 'justify-start'}`}>
                   <div className={`flex items-start ${message.isUser ? 'flex-row-reverse' : 'flex-row'}`}>
