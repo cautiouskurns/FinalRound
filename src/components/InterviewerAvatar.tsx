@@ -26,7 +26,7 @@ export function InterviewerAvatar(props: any) {
   useFrame((state, delta) => {
     mixer?.update(delta)
     if (group.current) {
-      group.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1
+      group.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.03) * 0.05
     }
   })
 

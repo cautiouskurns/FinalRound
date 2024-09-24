@@ -26,7 +26,7 @@ export function Scene() {
     <>
       <Canvas camera={{ position: [0, 1.1, 0.5], fov: 70 }}>
         <Suspense fallback={null}>
-          <ambientLight intensity={0.5} />
+          <ambientLight intensity={2.5} />
           <pointLight position={[10, 10, 10]} />
           <InterviewerAvatar ref={avatarRef} position={[0, 0, 0]} scale={1} />
           <directionalLight position={[0, 2, 2]} intensity={0.5} />
