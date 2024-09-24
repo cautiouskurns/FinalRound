@@ -6,14 +6,19 @@ import { Header } from '@/components/components-header'
 import { InterviewSimulation } from '@/components/components-interview-simulation'
 import { Syllabus } from '@/components/components-syllabus'
 import { Dashboard } from '@/components/Dashboard'
-import { Home, BookOpen, MessageSquare, Settings, LayoutDashboard } from 'lucide-react'
+import { Settings as SettingsComponent } from '@/components/settings'
+import { Home as HomeIcon, BookOpen, MessageSquare, Settings as SettingsIcon, LayoutDashboard, Mic } from 'lucide-react'
+import { Home } from '@/components/home'
+import React from 'react'
+import SpeechToText from '@/components/advanced-interview-simulation'
+import ClientSpeechToText from '@/components/advanced-interview-simulation'
 
-// Placeholder components for Home and Settings
-const HomePage = () => <div>Home Page Content</div>
-const SettingsPage = () => <div>Settings Page Content</div>
+// Remove or comment out these lines:
+// const HomePage = () => <div>Home Page Content</div>
+// const SettingsPage = () => <div>Settings Page Content</div>
 
 export default function Page() {
-  const [activeTab, setActiveTab] = useState<'home' | 'interview' | 'syllabus' | 'settings' | 'dashboard'>('home')
+  const [activeTab, setActiveTab] = useState<'home' | 'interview' | 'syllabus' | 'settings' | 'dashboard' | 'speechToText'>('home')
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -28,7 +33,7 @@ export default function Page() {
               className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition-all hover:text-primary 
                 ${activeTab === 'home' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
             >
-              <Home className="h-4 w-4" />
+              <HomeIcon className="h-4 w-4" />
               Home
             </Link>
 
@@ -39,7 +44,7 @@ export default function Page() {
                 ${activeTab === 'interview' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
             >
               <MessageSquare className="h-4 w-4" />
-              Interview Simulation
+              Test Questions
             </Link>
 
             <Link
@@ -68,18 +73,29 @@ export default function Page() {
               className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition-all hover:text-primary 
                 ${activeTab === 'settings' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
             >
-              <Settings className="h-4 w-4" />
+              <SettingsIcon className="h-4 w-4" />
               Settings
+            </Link>
+
+            <Link
+              href="#"
+              onClick={() => setActiveTab('speechToText')}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition-all hover:text-primary 
+                ${activeTab === 'speechToText' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
+            >
+              <Mic className="h-4 w-4" />
+              Speech to Text
             </Link>
           </nav>
         </aside>
 
         <main className="flex-1 p-6">
-          {activeTab === 'home' && <HomePage />}
+          {activeTab === 'home' && <Home />}
           {activeTab === 'interview' && <InterviewSimulation />}
           {activeTab === 'syllabus' && <Syllabus />}
           {activeTab === 'dashboard' && <Dashboard />}
-          {activeTab === 'settings' && <SettingsPage />}
+          {activeTab === 'settings' && <SettingsComponent />}
+          {activeTab === 'speechToText' && <ClientSpeechToText />}
         </main>
       </div>
     </div>
