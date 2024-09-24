@@ -12,13 +12,16 @@ import { Home } from '@/components/home'
 import React from 'react'
 import SpeechToText from '@/components/advanced-interview-simulation'
 import ClientSpeechToText from '@/components/advanced-interview-simulation'
+import AddUserForm from '@/components/AddUserForm'
+import BulkUserUpload from '@/components/BulkUserUpload'
+import { UserList } from '@/components/UserList'
 
 // Remove or comment out these lines:
 // const HomePage = () => <div>Home Page Content</div>
 // const SettingsPage = () => <div>Settings Page Content</div>
 
 export default function Page() {
-  const [activeTab, setActiveTab] = useState<'home' | 'interview' | 'syllabus' | 'settings' | 'dashboard' | 'speechToText'>('home')
+  const [activeTab, setActiveTab] = useState<'home' | 'interview' | 'syllabus' | 'settings' | 'dashboard' | 'speechToText' | 'addUser'>('home')
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -86,6 +89,16 @@ export default function Page() {
               <Mic className="h-4 w-4" />
               Speech to Text
             </Link>
+
+            <Link
+              href="#"
+              onClick={() => setActiveTab('addUser')}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition-all hover:text-primary 
+                ${activeTab === 'addUser' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
+            >
+              <HomeIcon className="h-4 w-4" />
+              Add User
+            </Link>
           </nav>
         </aside>
 
@@ -96,6 +109,13 @@ export default function Page() {
           {activeTab === 'dashboard' && <Dashboard />}
           {activeTab === 'settings' && <SettingsComponent />}
           {activeTab === 'speechToText' && <ClientSpeechToText />}
+          {activeTab === 'addUser' && (
+            <>
+              <AddUserForm />
+              <BulkUserUpload />
+              <UserList />
+            </>
+          )}
         </main>
       </div>
     </div>

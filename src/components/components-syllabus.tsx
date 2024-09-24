@@ -8,6 +8,7 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { motion, AnimatePresence } from 'framer-motion'
 import { ConceptTopicPage } from './ConceptTopicPage'; // Make sure to create this component
+import syllabusData from '../../public/data/syllabus_enhanced.json'; // Adjust the path as needed
 
 export interface Concept {
   name: string;
@@ -35,21 +36,15 @@ export interface Question {
 }
 
 export function Syllabus() {
-  const [syllabusData, setSyllabusData] = useState<Subject[]>([])
   const [selectedSubject, setSelectedSubject] = useState<string>('')
   const [expandedTopics, setExpandedTopics] = useState<Set<string>>(new Set())
   const [expandedConcepts, setExpandedConcepts] = useState<Set<string>>(new Set())
   const [selectedItem, setSelectedItem] = useState<Topic | Concept | null>(null);
 
   useEffect(() => {
-    fetch('/data/syllabus.json')
-      .then(response => response.json())
-      .then(data => {
-        setSyllabusData(data)
-        if (data.length > 0) {
-          setSelectedSubject(data[0].name)
-        }
-      })
+    if (syllabusData && syllabusData.length > 0) {
+      setSelectedSubject(syllabusData[0].name);
+    }
   }, [])
 
   const toggleTopic = (topicName: string) => {
@@ -84,7 +79,7 @@ export function Syllabus() {
     setSelectedItem(concept);
   }
 
-  const selectedSubjectData = syllabusData.find(subject => subject.name === selectedSubject)
+  const selectedSubjectData = syllabusData.find((subject: Subject) => subject.name === selectedSubject)
 
   return (
     <motion.div 
@@ -104,7 +99,7 @@ export function Syllabus() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            {syllabusData.map(subject => (
+            {syllabusData.map((subject: Subject) => (
               <SelectItem key={subject.name} value={subject.name}>
                 {subject.name}
               </SelectItem>
@@ -119,7 +114,7 @@ export function Syllabus() {
       </div>
       <div className="space-y-2">
         <AnimatePresence>
-          {selectedSubjectData && selectedSubjectData.topics.map(topic => (
+          {selectedSubjectData && selectedSubjectData.topics.map((topic: Topic) => (
             <motion.div 
               key={topic.name}
               initial={{ opacity: 0, y: 20 }}
