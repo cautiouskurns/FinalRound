@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.25.6",
+    "@monaco-editor/react": "^4.6.0",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.1",
@@ -32,6 +33,7 @@
     "express": "^4.21.0",
     "framer-motion": "^11.7.0",
     "lucide-react": "^0.445.0",
+    "monaco-editor": "^0.52.0",
     "next": "14.2.13",
     "node-fetch": "^3.3.2",
     "react": "^18",

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -14,6 +14,8 @@ import DiffMatchPatch from 'diff-match-patch'
 import { ErrorBoundary } from 'react-error-boundary'
 import ReactDOMServer from 'react-dom/server'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import dynamic from 'next/dynamic'
+import type { editor } from 'monaco-editor'
 
 interface Question {
   question: string
@@ -145,6 +147,9 @@ function FeedbackPage({ feedback }: { feedback: FeedbackItem[] }) {
   )
 }
 
+// Dynamically import Monaco Editor to avoid SSR issues
+const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false })
+
 export function InterviewSimulation() {
   const [questions, setQuestions] = useState<Question[]>([])
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null)
@@ -161,6 +166,8 @@ export function InterviewSimulation() {
   const [questionType, setQuestionType] = useState<'all' | 'technical' | 'competency'>('all')
   const [feedback, setFeedback] = useState<FeedbackItem[]>([])
   const [activeTab, setActiveTab] = useState<string>('interview')
+  const [codeOutput, setCodeOutput] = useState('')
+  const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
 
   const handleSubmitText = useCallback(() => {
     setIsTextSubmitted(true)
@@ -252,6 +259,29 @@ export function InterviewSimulation() {
     }
   }, [showAnswer])
 
+  const handleRunCode = () => {
+    if (editorRef.current) {
+      const code = editorRef.current.getValue()
+      try {
+        let output = '';
+        // Create a mock print function
+        const print = (text: any) => {
+          output += String(text) + '\n';
+        };
+        // Wrap the code in a function with our mock print
+        const wrappedCode = `
+          (function() {
+            ${code}
+          })();
+        `;
+        new Function('print', wrappedCode)(print);
+        setCodeOutput(output || 'No output');
+      } catch (error) {
+        setCodeOutput(`Error: ${error instanceof Error ? error.message : String(error)}`)
+      }
+    }
+  }
+
   if (!currentQuestion) {
     return <div>Loading...</div>
   }
@@ -317,11 +347,23 @@ export function InterviewSimulation() {
               {currentQuestion.type === 'technical' && (
                 <div className="mb-4">
                   <label className="block mb-2 font-bold">Code Answer:</label>
-                  <Textarea
-                    className="mb-2 h-64 bg-gray-800 text-white font-mono"
+                  <MonacoEditor
+                    height="400px"
+                    language="javascript"
+                    theme="vs-dark"
                     value={userCodeAnswer}
-                    onChange={(e) => setUserCodeAnswer(e.target.value)}
+                    onChange={(value) => setUserCodeAnswer(value || '')}
+                    onMount={(editor) => {
+                      editorRef.current = editor
+                    }}
                   />
+                  <Button onClick={handleRunCode} className="mt-2">Run Code</Button>
+                  {codeOutput && (
+                    <div className="mt-2 p-2 bg-gray-100 rounded">
+                      <h4 className="font-bold">Output:</h4>
+                      <pre>{codeOutput}</pre>
+                    </div>
+                  )}
                 </div>
               )}
 
