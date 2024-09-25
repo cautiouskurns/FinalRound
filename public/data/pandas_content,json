@@ -1,0 +1,202 @@
+[
+    {
+  "name": "Pandas",
+  "topics": [
+    {
+      "name": "Pandas Foundations",
+      "details": "Essential concepts and operations in pandas library",
+      "concepts": [
+        {
+          "name": "Importing pandas",
+          "details": "How to import and use the pandas library in Python",
+          "questions": [
+            {
+              "question": "What is the conventional alias used when importing pandas?",
+              "answer": "The conventional alias for pandas is 'pd'.",
+              "questionCode": "import pandas\n\ndf = pandas.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(df)",
+              "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(df)"
+            },
+            {
+              "question": "How can you check the version of pandas you're using?",
+              "answer": "You can check the pandas version by accessing the '__version__' attribute.",
+              "questionCode": "import pandas as pd\n# How would you print the pandas version?",
+              "answerCode": "import pandas as pd\nprint(pd.__version__)"
+            }
+          ],
+          "codeExample": "import pandas as pd\n\n# Creating a simple DataFrame\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(df)"
+        },
+        {
+          "name": "The pandas DataFrame",
+          "details": "Understanding the fundamental data structure in pandas",
+          "questions": [
+            {
+              "question": "What is a pandas DataFrame?",
+              "answer": "A DataFrame is a 2-dimensional labeled data structure with columns of potentially different types.",
+              "questionCode": "import pandas as pd\n\n# Create a DataFrame\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': ['a', 'b', 'c']})\n\n# What will this print?\nprint(type(df))",
+              "answerCode": "import pandas as pd\n\n# Create a DataFrame\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': ['a', 'b', 'c']})\n\n# This will print:\nprint(type(df))  # <class 'pandas.core.frame.DataFrame'>"
+            },
+            {
+              "question": "How can you create an empty DataFrame?",
+              "answer": "You can create an empty DataFrame using pd.DataFrame() without any arguments.",
+              "questionCode": "import pandas as pd\n\n# Create an empty DataFrame\nempty_df = pd.DataFrame()\n\n# What will this print?\nprint(empty_df)"
+            }
+          ],
+          "codeExample": "import pandas as pd\n\n# Creating a DataFrame from a dictionary\ndata = {'Name': ['John', 'Anna', 'Peter'], 'Age': [28, 34, 29]}\ndf = pd.DataFrame(data)\nprint(df)"
+        },
+        {
+          "name": "DataFrame attributes",
+          "details": "Exploring common attributes of a pandas DataFrame",
+          "questions": [
+            {
+              "question": "How can you get the number of rows and columns in a DataFrame?",
+              "answer": "You can use the 'shape' attribute of a DataFrame to get a tuple of (rows, columns).",
+              "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\n# How would you print the number of rows and columns?",
+              "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(df.shape)  # This will print: (3, 2)"
+            },
+            {
+              "question": "What attribute would you use to get the column names of a DataFrame?",
+              "answer": "You can use the 'columns' attribute to get the column names of a DataFrame.",
+              "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\n# How would you print the column names?",
+              "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(df.columns)  # This will print: Index(['A', 'B'], dtype='object')"
+            }
+          ],
+          "codeExample": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(f'Shape: {df.shape}')\nprint(f'Columns: {df.columns}')\nprint(f'Index: {df.index}')\nprint(f'Data types:\\n{df.dtypes}')"
+        },
+        {
+          "name": "Understanding data types",
+          "details": "Exploring different data types in pandas",
+          "questions": [
+            {
+              "question": "How can you check the data types of columns in a DataFrame?",
+              "answer": "You can use the 'dtypes' attribute of a DataFrame to check the data types of its columns.",
+              "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': ['a', 'b', 'c']})\n# How would you print the data types of the columns?",
+              "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': ['a', 'b', 'c']})\nprint(df.dtypes)"
+            },
+            {
+              "question": "What is the default data type for numeric data in pandas?",
+              "answer": "The default data type for numeric data in pandas is 'float64'.",
+              "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3]})\n# What will be the data type of column 'A'?",
+              "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3]})\nprint(df['A'].dtype)  # This will print: float64"
+            }
+          ],
+          "codeExample": "import pandas as pd\n\ndf = pd.DataFrame({\n    'A': [1, 2, 3],\n    'B': ['a', 'b', 'c'],\n    'C': [1.1, 2.2, 3.3],\n    'D': [True, False, True]\n})\nprint(df.dtypes)"
+        },
+        {
+          "name": "Selecting a column",
+          "details": "Methods to select a single column from a DataFrame",
+          "questions": [
+            {
+              "question": "What are two ways to select a single column from a DataFrame?",
+              "answer": "You can select a column using either dot notation (df.column_name) or square brackets (df['column_name']).",
+              "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\n# How would you select column 'A' in two different ways?",
+              "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(df.A)  # or\nprint(df['A'])"
+            },
+            {
+              "question": "What is the difference between selecting a column with dot notation and square brackets?",
+              "answer": "Dot notation is more concise but only works for column names that are valid Python identifiers. Square brackets work for any column name and allow for variable column names.",
+              "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], '2B': [4, 5, 6]})\n# How would you select column '2B'?",
+              "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], '2B': [4, 5, 6]})\nprint(df['2B'])  # This works\n# df.2B  # This would raise a SyntaxError"
+            }
+          ],
+          "codeExample": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})\nprint(df.A)  # Using dot notation\nprint(df['B'])  # Using square brackets\ncolumn_name = 'C'\nprint(df[column_name])  # Using a variable"
+        },
+        {
+          "name": "Calling Series methods",
+          "details": "Understanding and using methods available on pandas Series",
+          "questions": [
+            {
+              "question": "What is a pandas Series?",
+              "answer": "A pandas Series is a one-dimensional labeled array capable of holding data of any type.",
+              "questionCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\n# What will this print?\nprint(type(s))",
+              "answerCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nprint(type(s))  # This will print: <class 'pandas.core.series.Series'>"
+            },
+            {
+              "question": "How can you calculate the mean of a Series?",
+              "answer": "You can use the 'mean()' method on a Series to calculate its mean.",
+              "questionCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\n# How would you calculate the mean of this Series?",
+              "answerCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nprint(s.mean())  # This will print: 3.0"
+            }
+          ],
+          "codeExample": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nprint(f'Mean: {s.mean()}')\nprint(f'Median: {s.median()}')\nprint(f'Standard Deviation: {s.std()}')\nprint(f'Value Counts:\\n{s.value_counts()}')"
+        },
+        {
+          "name": "Series operations",
+          "details": "Performing operations on pandas Series",
+          "questions": [
+            {
+              "question": "How can you add a constant to every element in a Series?",
+              "answer": "You can add a constant to a Series by simply using the '+' operator with the Series and the constant.",
+              "questionCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\n# How would you add 10 to every element in this Series?",
+              "answerCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nresult = s + 10\nprint(result)"
+            },
+            {
+              "question": "How can you perform element-wise operations between two Series?",
+              "answer": "You can perform element-wise operations between two Series of the same length using arithmetic operators.",
+              "questionCode": "import pandas as pd\n\ns1 = pd.Series([1, 2, 3, 4, 5])\ns2 = pd.Series([10, 20, 30, 40, 50])\n# How would you multiply these two Series element-wise?",
+              "answerCode": "import pandas as pd\n\ns1 = pd.Series([1, 2, 3, 4, 5])\ns2 = pd.Series([10, 20, 30, 40, 50])\nresult = s1 * s2\nprint(result)"
+            }
+          ],
+          "codeExample": "import pandas as pd\n\ns1 = pd.Series([1, 2, 3, 4, 5])\ns2 = pd.Series([10, 20, 30, 40, 50])\nprint(f'Addition: {s1 + s2}')\nprint(f'Subtraction: {s2 - s1}')\nprint(f'Multiplication: {s1 * s2}')\nprint(f'Division: {s2 / s1}')"
+        },
+        {
+          "name": "Chaining Series methods",
+          "details": "Combining multiple Series operations in a single expression",
+          "questions": [
+            {
+              "question": "What is method chaining in pandas?",
+              "answer": "Method chaining is the practice of applying multiple methods to a Series or DataFrame in a single line of code, where each method call is chained to the previous one.",
+              "questionCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\n# How would you chain methods to add 10 to each element, then calculate the mean?",
+              "answerCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nresult = (s + 10).mean()\nprint(result)  # This will print: 13.0"
+            },
+            {
+              "question": "What is the benefit of method chaining?",
+              "answer": "Method chaining can make code more readable and concise by eliminating the need for intermediate variables.",
+              "questionCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\n# Write a chain of methods to add 10, multiply by 2, then get the maximum value",
+              "answerCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nresult = ((s + 10) * 2).max()\nprint(result)  # This will print: 30"
+            }
+          ],
+          "codeExample": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nresult = (s\n          .add(10)\n          .mul(2)\n          .div(5)\n          .subtract(1)\n          .mean())\nprint(f'Result of chained operations: {result}')"
+        },
+              {
+          "name": "Renaming column names",
+          "details": "Methods to rename columns in a pandas DataFrame",
+          "questions": [
+            {
+              "question": "How can you rename a single column in a DataFrame?",
+              "answer": "You can use the 'rename()' method with a dictionary mapping old names to new names.",
+              "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\n# How would you rename column 'A' to 'Alpha'?",
+              "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\ndf = df.rename(columns={'A': 'Alpha'})\nprint(df)"
+            },
+            {
+              "question": "How can you rename all columns at once?",
+              "answer": "You can assign a new list of names directly to the 'columns' attribute of the DataFrame.",
+              "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\n# How would you rename all columns to ['X', 'Y']?",
+              "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\ndf.columns = ['X', 'Y']\nprint(df)"
+            }
+          ],
+          "codeExample": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\n\n# Rename a single column\ndf = df.rename(columns={'A': 'Alpha'})\n\n# Rename using a function\ndf = df.rename(columns=str.lower)\n\n# Rename all columns\ndf.columns = ['X', 'Y']\n\nprint(df)"
+        },
+        {
+          "name": "Creating and deleting columns",
+          "details": "Methods to add new columns or remove existing columns from a DataFrame",
+          "questions": [
+            {
+              "question": "How can you add a new column to a DataFrame?",
+              "answer": "You can add a new column by assigning a Series or list to a new column name.",
+              "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\n# How would you add a new column 'C' with values [7, 8, 9]?",
+              "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\ndf['C'] = [7, 8, 9]\nprint(df)"
+            },
+            {
+              "question": "How can you delete a column from a DataFrame?",
+              "answer": "You can use the 'drop()' method to remove a column, specifying the column name and axis=1 for columns.",
+              "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})\n# How would you delete column 'B'?",
+              "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})\ndf = df.drop('B', axis=1)\nprint(df)"
+            }
+          ],
+          "codeExample": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\n\n# Add a new column\ndf['C'] = df['A'] + df['B']\n\n# Add a column with a single value\ndf['D'] = 10\n\n# Delete a column\ndf = df.drop('B', axis=1)\n\nprint(df)"
+        }
+      ]
+    }
+  ]
+}
+]
