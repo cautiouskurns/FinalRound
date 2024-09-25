@@ -18,7 +18,11 @@ function CameraPositionLogger({ setPosition }: { setPosition: (position: number[
   return null
 }
 
-export function Scene() {
+export interface SceneProps {
+  isSpeaking: boolean;
+}
+
+export const Scene: React.FC<SceneProps> = ({ isSpeaking }) => {
   const avatarRef = useRef<Object3D>(null)
   const [cameraPosition, setCameraPosition] = useState([0, 1.6, 0.5])
 

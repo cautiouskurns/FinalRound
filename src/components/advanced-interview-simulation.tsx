@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback, Suspense } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -8,7 +8,7 @@ import { User, Bot } from 'lucide-react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { InterviewerAvatar } from './InterviewerAvatar'
-import { Scene } from './scene'
+import { Scene, SceneProps } from './scene'
 
 interface Message {
   text: string;
@@ -21,6 +21,10 @@ const SpeechToText: React.FC = () => {
   const [recognition, setRecognition] = useState<SpeechRecognition | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [conversation, setConversation] = useState<Message[]>([])
+  const [isSpeaking, setIsSpeaking] = useState(false)
+  const speechSynthesisRef = useRef<SpeechSynthesis | null>(null)
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
+  const [selectedVoice, setSelectedVoice] = useState<SpeechSynthesisVoice | null>(null)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -58,6 +62,26 @@ const SpeechToText: React.FC = () => {
     }
   }, [isListening])
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      speechSynthesisRef.current = window.speechSynthesis
+    }
+  }, [])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      const loadVoices = () => {
+        const availableVoices = window.speechSynthesis.getVoices()
+        setVoices(availableVoices)
+        // Optionally set a default voice
+        setSelectedVoice(availableVoices.find(voice => voice.lang === 'en-US') || availableVoices[0])
+      }
+
+      loadVoices()
+      window.speechSynthesis.onvoiceschanged = loadVoices
+    }
+  }, [])
+
   const startListening = useCallback(() => {
     if (recognition) {
       recognition.start()
@@ -80,6 +104,23 @@ const SpeechToText: React.FC = () => {
     }
   }, [recognition, transcript])
 
+  const speakMessage = useCallback((text: string) => {
+    if (speechSynthesisRef.current && selectedVoice) {
+      const utterance = new SpeechSynthesisUtterance(text)
+      utterance.voice = selectedVoice
+      utterance.onstart = () => setIsSpeaking(true)
+      utterance.onend = () => setIsSpeaking(false)
+      speechSynthesisRef.current.speak(utterance)
+    }
+  }, [selectedVoice])
+
+  useEffect(() => {
+    const lastMessage = conversation[conversation.length - 1]
+    if (lastMessage && !lastMessage.isUser) {
+      speakMessage(lastMessage.text)
+    }
+  }, [conversation, speakMessage])
+
   return (
     <Card className="w-full max-w-6xl mx-auto"> {/* Increased max-width */}
       <CardHeader>
@@ -88,7 +129,7 @@ const SpeechToText: React.FC = () => {
       <CardContent>
         <div className="flex flex-col md:flex-row gap-4"> {/* Changed to column layout on small screens */}
           <div className="w-full md:w-1/2 h-[600px]"> {/* Increased width and height */}
-            <Scene />
+            <Scene isSpeaking={isSpeaking} />
           </div>
           <div className="w-full md:w-1/2"> {/* Adjusted width */}
             <ScrollArea className="h-[600px] border rounded-md p-4"> {/* Increased height */}
@@ -117,13 +158,24 @@ const SpeechToText: React.FC = () => {
                 </div>
               )}
             </ScrollArea>
-            <div className="mt-4 flex gap-2">
+            <div className="mt-4 flex gap-2 flex-wrap">
               <Button onClick={startListening} disabled={isListening}>
                 {isListening ? 'Listening...' : 'Start Speaking'}
               </Button>
               <Button onClick={stopListening} disabled={!isListening} variant="secondary">
                 Stop Speaking
               </Button>
+              <select 
+                value={selectedVoice?.name || ''}
+                onChange={(e) => setSelectedVoice(voices.find(v => v.name === e.target.value) || null)}
+                className="border rounded px-2 py-1"
+              >
+                {voices.map((voice) => (
+                  <option key={voice.name} value={voice.name}>
+                    {voice.name} ({voice.lang})
+                  </option>
+                ))}
+              </select>
             </div>
             {error && <p className="text-red-500 mt-2">{error}</p>}
           </div>

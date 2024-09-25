@@ -349,7 +349,7 @@ export function InterviewSimulation() {
                   <label className="block mb-2 font-bold">Code Answer:</label>
                   <MonacoEditor
                     height="400px"
-                    language="javascript"
+                    language="python"
                     theme="vs-dark"
                     value={userCodeAnswer}
                     onChange={(value) => setUserCodeAnswer(value || '')}
