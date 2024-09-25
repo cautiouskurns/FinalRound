@@ -165,17 +165,39 @@ export function ConceptTopicPage({ item, onClose, onBack }: ConceptTopicPageProp
   );
 }
 
+interface CodeExample {
+  label?: string;
+  code?: string;
+}
+
 function CodeExamples({ concept }: { concept: Concept }) {
   console.log('Concept:', concept);
-  console.log('Code Example:', concept.codeExample);
+  console.log('Code Examples (raw):', concept.codeExample);
+  console.log('Type of Code Examples:', typeof concept.codeExample);
 
-  const codeExamples = Array.isArray(concept.codeExample) 
-    ? concept.codeExample 
-    : concept.codeExample ? [concept.codeExample] : [];
+  let codeExamples = [];
+  if (typeof concept.codeExample === 'string') {
+    try {
+      codeExamples = JSON.parse(concept.codeExample);
+      console.log('Parsed Code Examples:', codeExamples);
+    } catch (error) {
+      console.error('Error parsing code examples:', error);
+      // If parsing fails, use the string as is
+      codeExamples = [{ code: concept.codeExample }];
+    }
+  } else if (Array.isArray(concept.codeExample)) {
+    codeExamples = concept.codeExample;
+  } else if (concept.codeExample) {
+    codeExamples = [concept.codeExample];
+  }
 
-  console.log('Code Examples after processing:', codeExamples);
+  codeExamples = Array.isArray(codeExamples) ? codeExamples : [codeExamples];
+
+  console.log('Final Code Examples:', codeExamples);
+  console.log('Code Examples Length:', codeExamples.length);
 
   if (codeExamples.length === 0) {
+    console.warn('No code examples found for:', concept.name);
     return (
       <Card>
         <CardHeader>
@@ -193,9 +215,9 @@ function CodeExamples({ concept }: { concept: Concept }) {
         <CardDescription>Code examples for {concept.name}</CardDescription>
       </CardHeader>
       <CardContent>
-        {codeExamples.map((example, index) => (            
+        {codeExamples.map((example: CodeExample, index: number) => (            
           <div key={index} className="mb-4">
-            <h3 className="text-lg font-semibold mb-2">{example.label || 'Untitled Example'}</h3>
+            <h3 className="text-lg font-semibold mb-2">{example.label || `Example ${index + 1}`}</h3>
             {example.code ? (
               <SyntaxHighlighter language="javascript" style={vscDarkPlus} className="rounded-md">
                 {example.code}
@@ -204,7 +226,7 @@ function CodeExamples({ concept }: { concept: Concept }) {
               <p>No code provided for this example.</p>
             )}
             {example.code && (
-              <Button onClick={() => navigator.clipboard.writeText(example.code)} className="mt-2">
+              <Button onClick={() => navigator.clipboard.writeText(example.code ?? '')} className="mt-2">
                 Copy Code
               </Button>
             )}
