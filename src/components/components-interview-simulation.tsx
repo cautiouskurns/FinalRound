@@ -8,9 +8,12 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import DiffMatchPatch from 'diff-match-patch'
 import { ErrorBoundary } from 'react-error-boundary'
 import ReactDOMServer from 'react-dom/server'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface Question {
   question: string
@@ -21,6 +24,7 @@ interface Question {
   subject: string
   topic: string
   concept: string
+  type: 'technical' | 'competency'
 }
 
 interface Concept {
@@ -38,6 +42,13 @@ interface Topic {
 interface Subject {
   name: string
   topics: Topic[]
+}
+
+interface FeedbackItem {
+  question: string
+  userAnswer: string
+  correctAnswer: string
+  isCorrect: boolean
 }
 
 function DiffView({ userAnswer, correctAnswer, language = 'text' }: { userAnswer: string, correctAnswer: string, language?: string }) {
@@ -113,6 +124,27 @@ function SafeSyntaxHighlighter({ children, ...props }: React.PropsWithChildren<a
   )
 }
 
+function FeedbackPage({ feedback }: { feedback: FeedbackItem[] }) {
+  return (
+    <div>
+      <h2 className="text-2xl font-bold mb-4">Feedback Summary</h2>
+      {feedback.map((item, index) => (
+        <Card key={index} className="mb-4">
+          <CardHeader>
+            <CardTitle>Question {index + 1}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p><strong>Question:</strong> {item.question}</p>
+            <p><strong>Your Answer:</strong> {item.userAnswer}</p>
+            <p><strong>Correct Answer:</strong> {item.correctAnswer}</p>
+            <p><strong>Result:</strong> {item.isCorrect ? 'Correct' : 'Incorrect'}</p>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  )
+}
+
 export function InterviewSimulation() {
   const [questions, setQuestions] = useState<Question[]>([])
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null)
@@ -126,6 +158,9 @@ export function InterviewSimulation() {
   const [userCodeAnswer, setUserCodeAnswer] = useState('')
   const [isTextSubmitted, setIsTextSubmitted] = useState(false)
   const [isCodeSubmitted, setIsCodeSubmitted] = useState(false)
+  const [questionType, setQuestionType] = useState<'all' | 'technical' | 'competency'>('all')
+  const [feedback, setFeedback] = useState<FeedbackItem[]>([])
+  const [activeTab, setActiveTab] = useState<string>('interview')
 
   const handleSubmitText = useCallback(() => {
     setIsTextSubmitted(true)
@@ -148,7 +183,8 @@ export function InterviewSimulation() {
                 subject: subject.name,
                 topic: topic.name,
                 concept: concept.name,
-                hint: concept.details
+                hint: concept.details,
+                type: question.questionCode ? 'technical' : 'competency' // Assuming questions with code are technical
               }))
             )
           )
@@ -158,6 +194,11 @@ export function InterviewSimulation() {
         setCurrentQuestion(allQuestions[0])
       })
   }, [])
+
+  const filteredQuestions = useMemo(() => {
+    if (questionType === 'all') return questions;
+    return questions.filter(q => q.type === questionType);
+  }, [questions, questionType])
 
   const { currentSubject, currentTopic, currentConcept } = useMemo(() => {
     console.log('Current question:', currentQuestion);
@@ -190,10 +231,20 @@ export function InterviewSimulation() {
     setShowAnswer(true)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     setIsSubmitted(true)
     setShowAnswer(true)
-  }
+
+    if (currentQuestion) {
+      const newFeedbackItem: FeedbackItem = {
+        question: currentQuestion.question,
+        userAnswer: userTextAnswer,
+        correctAnswer: currentQuestion.answer,
+        isCorrect: userTextAnswer.trim().toLowerCase() === currentQuestion.answer.trim().toLowerCase()
+      }
+      setFeedback(prevFeedback => [...prevFeedback, newFeedbackItem])
+    }
+  }, [currentQuestion, userTextAnswer])
 
   useEffect(() => {
     if (showAnswer) {
@@ -206,130 +257,139 @@ export function InterviewSimulation() {
   }
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Interview Simulation</h2>
       
-      {/* Breadcrumb */}
-      <Breadcrumb className="mb-4">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink>{currentSubject}</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink>{currentTopic}</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>{currentConcept}</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList>
+          <TabsTrigger value="interview">Interview</TabsTrigger>
+          <TabsTrigger value="feedback">Feedback</TabsTrigger>
+        </TabsList>
+        <TabsContent value="interview">
+          <Breadcrumb className="mb-4">
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink>{currentSubject}</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink>{currentTopic}</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{currentConcept}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{currentQuestion.question}</CardTitle>
-          {currentQuestion.questionCode && (
-            <SafeSyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2">
-              {currentQuestion.questionCode || ''}
-            </SafeSyntaxHighlighter>
-          )}
-        </CardHeader>
-        <CardContent>
           <div className="mb-4">
-            <label className="block mb-2 font-bold">Text Answer:</label>
-            <Textarea
-              className="mb-2 h-64" // 4 times taller
-              value={userTextAnswer}
-              onChange={(e) => setUserTextAnswer(e.target.value)}
-            />
-            <Button onClick={handleSubmitText}>Submit Answer</Button>
-          </div>
-          
-          <div className="mb-4">
-            <label className="block mb-2 font-bold">Code Answer:</label>
-            <Textarea
-              className="mb-2 h-64 bg-gray-800 text-white font-mono" // 4 times taller, darker background
-              value={userCodeAnswer}
-              onChange={(e) => setUserCodeAnswer(e.target.value)}
-            />
-            <Button onClick={handleSubmitCode}>Submit Code</Button>
+            <Select value={questionType} onValueChange={(value: any) => setQuestionType(value)}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Question Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Questions</SelectItem>
+                <SelectItem value="technical">Technical</SelectItem>
+                <SelectItem value="competency">Competency</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
-          <div className="flex space-x-4 mb-4">
-            <Button onClick={handleSubmit}>Submit Answer</Button>
-            <Button onClick={handleShowHint}>Show Hint</Button>
-            <Button onClick={handleShowAnswer}>Show Answer</Button>
-            <Button onClick={handleNextQuestion}>Next Question</Button>
-          </div>
-          {showHint && (
-            <Alert className="mb-4">
-              <AlertTitle>Hint</AlertTitle>
-              <AlertDescription>{currentQuestion.hint}</AlertDescription>
-            </Alert>
-          )}
-          {isSubmitted && (
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <div>
-                <h3 className="font-bold mb-2">Your Answer:</h3>
-                <div className="bg-gray-100 p-4 rounded whitespace-pre-wrap">
-                  {compareAnswers(userAnswer, currentQuestion.answer)}
-                </div>
+          <Card className="mb-4">
+            <CardHeader>
+              <CardTitle>{currentQuestion.question}</CardTitle>
+              {currentQuestion.questionCode && (
+                <SafeSyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2">
+                  {currentQuestion.questionCode || ''}
+                </SafeSyntaxHighlighter>
+              )}
+            </CardHeader>
+            <CardContent>
+              <div className="mb-4">
+                <label className="block mb-2 font-bold">Text Answer:</label>
+                <Textarea
+                  className="mb-2 h-64"
+                  value={userTextAnswer}
+                  onChange={(e) => setUserTextAnswer(e.target.value)}
+                />
               </div>
-              <div>
-                <h3 className="font-bold mb-2">Correct Answer:</h3>
-                <div className="bg-gray-100 p-4 rounded whitespace-pre-wrap">
-                  {compareAnswers(currentQuestion.answer, userAnswer)}
+              
+              {currentQuestion.type === 'technical' && (
+                <div className="mb-4">
+                  <label className="block mb-2 font-bold">Code Answer:</label>
+                  <Textarea
+                    className="mb-2 h-64 bg-gray-800 text-white font-mono"
+                    value={userCodeAnswer}
+                    onChange={(e) => setUserCodeAnswer(e.target.value)}
+                  />
                 </div>
+              )}
+
+              <div className="flex space-x-4 mb-4">
+                <Button onClick={handleSubmit}>Submit Answer</Button>
+                <Button onClick={handleShowHint}>Show Hint</Button>
+                <Button onClick={handleShowAnswer}>Show Correct Answer</Button>
+                <Button onClick={handleNextQuestion}>Next Question</Button>
               </div>
-            </div>
-          )}
-          {showAnswer && !isSubmitted && (
-            <Alert className="mb-4">
-              <AlertTitle>Answer</AlertTitle>
-              <AlertDescription>
-                {currentQuestion.answer}
-                {currentQuestion.answerCode && (
-                  <SafeSyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2">
-                    {currentQuestion.answerCode || ''}
-                  </SafeSyntaxHighlighter>
-                )}
-              </AlertDescription>
-            </Alert>
-          )}
-          {isTextSubmitted && (
-            <div className="mb-4">
-              <h3 className="font-bold mb-2">Text Answer Comparison:</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h4 className="font-semibold">Your Answer:</h4>
-                  <DiffView userAnswer={userTextAnswer} correctAnswer={currentQuestion.answer} />
+
+              {showHint && (
+                <Alert className="mb-4">
+                  <AlertTitle>Hint</AlertTitle>
+                  <AlertDescription>{currentQuestion.hint}</AlertDescription>
+                </Alert>
+              )}
+
+              {isSubmitted && (
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <h3 className="font-bold mb-2">Your Answer:</h3>
+                    <DiffView userAnswer={userTextAnswer} correctAnswer={currentQuestion.answer} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold mb-2">Correct Answer:</h3>
+                    <DiffView userAnswer={currentQuestion.answer} correctAnswer={userTextAnswer} />
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-semibold">Correct Answer:</h4>
-                  <DiffView userAnswer={currentQuestion.answer} correctAnswer={userTextAnswer} />
+              )}
+
+              {isSubmitted && currentQuestion.type === 'technical' && currentQuestion.answerCode && (
+                <div className="mb-4">
+                  <h3 className="font-bold mb-2">Code Answer Comparison:</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <h4 className="font-semibold">Your Code:</h4>
+                      <DiffView userAnswer={userCodeAnswer} correctAnswer={currentQuestion.answerCode} language="javascript" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">Correct Code:</h4>
+                      <DiffView userAnswer={currentQuestion.answerCode} correctAnswer={userCodeAnswer} language="javascript" />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-          {isCodeSubmitted && currentQuestion.answerCode && (
-            <div className="mb-4">
-              <h3 className="font-bold mb-2">Code Answer Comparison:</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h4 className="font-semibold">Your Code:</h4>
-                  <DiffView userAnswer={userCodeAnswer} correctAnswer={currentQuestion.answerCode} language="javascript" />
-                </div>
-                <div>
-                  <h4 className="font-semibold">Correct Code:</h4>
-                  <DiffView userAnswer={currentQuestion.answerCode} correctAnswer={userCodeAnswer} language="javascript" />
-                </div>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-      <div className="mt-4 text-xl font-bold">Score: {score}</div>
+              )}
+
+              {showAnswer && (
+                <Alert className="mb-4">
+                  <AlertTitle>Correct Answer</AlertTitle>
+                  <AlertDescription>
+                    {currentQuestion.answer}
+                    {currentQuestion.answerCode && (
+                      <SafeSyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2">
+                        {currentQuestion.answerCode || ''}
+                      </SafeSyntaxHighlighter>
+                    )}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </CardContent>
+          </Card>
+
+          <div className="mt-4 text-xl font-bold">Score: {score}</div>
+        </TabsContent>
+        <TabsContent value="feedback">
+          <FeedbackPage feedback={feedback} />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }
