@@ -27,6 +27,7 @@
     "@types/node-fetch": "^2.6.11",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "convai-web-sdk": "^0.1.2",
     "csv-parse": "^5.5.6",
     "diff": "^7.0.0",
     "diff-match-patch": "^1.0.5",

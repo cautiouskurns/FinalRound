@@ -13,7 +13,6 @@ import { Scene, SceneProps } from './scene'
 interface Message {
   text: string;
   isUser: boolean;
-  isInterviewer: boolean;
 }
 
 const SpeechToText: React.FC = () => {

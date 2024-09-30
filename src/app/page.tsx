@@ -15,13 +15,15 @@ import ClientSpeechToText from '@/components/advanced-interview-simulation'
 import AddUserForm from '@/components/AddUserForm'
 import BulkUserUpload from '@/components/BulkUserUpload'
 import { UserList } from '@/components/UserList'
+import AdvancedInterviewSimulation from '@/components/advanced-interview-simulation'
+import ConvaiTest from '@/components/ConvaiTest'
 
 // Remove or comment out these lines:
 // const HomePage = () => <div>Home Page Content</div>
 // const SettingsPage = () => <div>Settings Page Content</div>
 
 export default function Page() {
-  const [activeTab, setActiveTab] = useState<'home' | 'interview' | 'syllabus' | 'settings' | 'dashboard' | 'speechToText' | 'addUser'>('home')
+  const [activeTab, setActiveTab] = useState<'home' | 'interview' | 'syllabus' | 'settings' | 'dashboard' | 'speechToText' | 'addUser' | 'convaiTest'>('home')
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -99,6 +101,16 @@ export default function Page() {
               <HomeIcon className="h-4 w-4" />
               Add User
             </Link>
+
+            <Link
+              href="#"
+              onClick={() => setActiveTab('convaiTest')}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition-all hover:text-primary 
+                ${activeTab === 'convaiTest' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
+            >
+              <MessageSquare className="h-4 w-4" />
+              Convai Test
+            </Link>
           </nav>
         </aside>
 
@@ -116,6 +128,7 @@ export default function Page() {
               <UserList />
             </>
           )}
+          {activeTab === 'convaiTest' && <ConvaiTest />}
         </main>
       </div>
     </div>
