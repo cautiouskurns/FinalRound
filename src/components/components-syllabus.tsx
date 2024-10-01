@@ -7,45 +7,54 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { motion, AnimatePresence } from 'framer-motion'
-import { ConceptTopicPage } from './ConceptTopicPage'; // Make sure to create this component
-import syllabusData from '../../public/data/syllabus_enhanced.json'; // Adjust the path as needed
+import { ConceptTopicPage } from './ConceptTopicPage';
 
 export interface Concept {
+  id: number;
   name: string;
   details: string;
-  codeExample?: string;
-  questions?: Question[];
+  code_example?: string;
 }
 
-export interface Topic { // Ensure Topic is exported
-  concepts: Concept[];
+export interface Topic {
+  id: number;
   name: string;
   details: string;
+  concepts: Concept[];
 }
 
 export interface Subject {
-  name: string
-  topics: Topic[]
-}
-
-export interface Question {
-  question: string;
-  answer: string;
-  questionCode?: string;
-  answerCode?: string;
+  id: number;
+  name: string;
+  topics: Topic[];
 }
 
 export function Syllabus() {
+  const [syllabusData, setSyllabusData] = useState<Subject[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<string>('')
   const [expandedTopics, setExpandedTopics] = useState<Set<string>>(new Set())
   const [expandedConcepts, setExpandedConcepts] = useState<Set<string>>(new Set())
   const [selectedItem, setSelectedItem] = useState<Topic | Concept | null>(null);
 
   useEffect(() => {
-    if (syllabusData && syllabusData.length > 0) {
-      setSelectedSubject(syllabusData[0].name);
-    }
+    fetchSyllabusData();
   }, [])
+
+  const fetchSyllabusData = async () => {
+    try {
+      const response = await fetch('/api/syllabus');
+      if (!response.ok) {
+        throw new Error('Failed to fetch syllabus data');
+      }
+      const data = await response.json();
+      setSyllabusData(data);
+      if (data.length > 0) {
+        setSelectedSubject(data[0].name);
+      }
+    } catch (error) {
+      console.error('Error fetching syllabus data:', error);
+    }
+  };
 
   const toggleTopic = (topicName: string) => {
     setExpandedTopics(prev => {

@@ -15,7 +15,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 
 interface ConceptTopicPageProps {
-  item: Concept | Topic;
+  item: Topic | Concept;
   onClose: () => void;
   onBack: () => void;
 }
@@ -172,23 +172,23 @@ interface CodeExample {
 
 function CodeExamples({ concept }: { concept: Concept }) {
   console.log('Concept:', concept);
-  console.log('Code Examples (raw):', concept.codeExample);
-  console.log('Type of Code Examples:', typeof concept.codeExample);
+  console.log('Code Examples (raw):', concept.code_example);
+  console.log('Type of Code Examples:', typeof concept.code_example);
 
   let codeExamples = [];
-  if (typeof concept.codeExample === 'string') {
+  if (typeof concept.code_example === 'string') {
     try {
-      codeExamples = JSON.parse(concept.codeExample);
+      codeExamples = JSON.parse(concept.code_example);
       console.log('Parsed Code Examples:', codeExamples);
     } catch (error) {
       console.error('Error parsing code examples:', error);
       // If parsing fails, use the string as is
-      codeExamples = [{ code: concept.codeExample }];
+      codeExamples = [{ code: concept.code_example }];
     }
-  } else if (Array.isArray(concept.codeExample)) {
-    codeExamples = concept.codeExample;
-  } else if (concept.codeExample) {
-    codeExamples = [concept.codeExample];
+  } else if (Array.isArray(concept.code_example)) {
+    codeExamples = concept.code_example;
+  } else if (concept.code_example) {
+    codeExamples = [concept.code_example];
   }
 
   codeExamples = Array.isArray(codeExamples) ? codeExamples : [codeExamples];
