@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, FormEvent } from 'react'
+import { useState, useEffect, FormEvent, ChangeEvent } from 'react'
 
 interface Concept {
   id: number;
@@ -32,6 +32,7 @@ export function ConceptTest() {
   const [newConcept, setNewConcept] = useState({ name: '', details: '', topic_id: '' });
   const [newTopic, setNewTopic] = useState({ name: '', details: '', subject_id: '' });
   const [newSubject, setNewSubject] = useState({ name: '', details: '' });
+  const [syllabusFile, setSyllabusFile] = useState<File | null>(null);
 
   const fetchData = async () => {
     try {
@@ -122,6 +123,43 @@ export function ConceptTest() {
     }
   };
 
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setSyllabusFile(e.target.files[0]);
+    }
+  };
+
+  const handleSyllabusImport = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!syllabusFile) return;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const text = e.target?.result;
+      if (typeof text === 'string') {
+        try {
+          const syllabusData = JSON.parse(text);
+          const response = await fetch('/api/import-syllabus', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(syllabusData),
+          });
+          if (!response.ok) {
+            throw new Error('Failed to import syllabus');
+          }
+          alert('Syllabus imported successfully');
+          fetchData();
+        } catch (error) {
+          console.error('Error importing syllabus:', error);
+          setError('Failed to import syllabus. Please try again.');
+        }
+      }
+    };
+    reader.readAsText(syllabusFile);
+  };
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -129,6 +167,16 @@ export function ConceptTest() {
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Test Subjects, Topics, and Concepts</h1>
       
+      <form onSubmit={handleSyllabusImport} className="mb-8">
+        <input
+          type="file"
+          accept=".json"
+          onChange={handleFileChange}
+          className="border p-2 mr-2"
+        />
+        <button type="submit" className="bg-purple-500 text-white p-2 rounded">Import Syllabus</button>
+      </form>
+
       <form onSubmit={handleSubjectSubmit} className="mb-8">
         <input
           type="text"
