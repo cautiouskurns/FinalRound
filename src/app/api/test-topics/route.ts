@@ -1,6 +1,17 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '../../../database/config';
 
+export async function GET() {
+  try {
+    const db = await getDb();
+    const topics = await db.all('SELECT * FROM topics');
+    return NextResponse.json(topics);
+  } catch (error) {
+    console.error('Error fetching topics:', error);
+    return NextResponse.json({ error: 'Failed to fetch topics' }, { status: 500 });
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const { name, details } = await request.json();

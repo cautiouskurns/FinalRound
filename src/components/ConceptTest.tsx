@@ -6,35 +6,47 @@ interface Concept {
   id: number;
   name: string;
   details: string;
+  topic_name?: string;
+}
+
+interface Topic {
+  id: number;
+  name: string;
+  details: string;
 }
 
 export function ConceptTest() {
   const [concepts, setConcepts] = useState<Concept[]>([]);
+  const [topics, setTopics] = useState<Topic[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [newConcept, setNewConcept] = useState({ name: '', details: '' });
+  const [newConcept, setNewConcept] = useState({ name: '', details: '', topic_id: '' });
+  const [newTopic, setNewTopic] = useState({ name: '', details: '' });
 
-  const fetchConcepts = async () => {
+  const fetchData = async () => {
     try {
-      const response = await fetch('/api/test-concepts');
-      if (!response.ok) {
-        throw new Error('Failed to fetch concepts');
+      const conceptsResponse = await fetch('/api/test-concepts');
+      const topicsResponse = await fetch('/api/test-concepts?type=topics');
+      if (!conceptsResponse.ok || !topicsResponse.ok) {
+        throw new Error('Failed to fetch data');
       }
-      const data = await response.json();
-      setConcepts(data);
+      const conceptsData = await conceptsResponse.json();
+      const topicsData = await topicsResponse.json();
+      setConcepts(conceptsData);
+      setTopics(topicsData);
     } catch (error) {
-      console.error('Error fetching concepts:', error);
-      setError('Failed to load concepts. Please try again later.');
+      console.error('Error fetching data:', error);
+      setError('Failed to load data. Please try again later.');
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchConcepts();
+    fetchData();
   }, []);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleConceptSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
       const response = await fetch('/api/add-concept', {
@@ -47,11 +59,32 @@ export function ConceptTest() {
       if (!response.ok) {
         throw new Error('Failed to add concept');
       }
-      setNewConcept({ name: '', details: '' });
-      fetchConcepts();
+      setNewConcept({ name: '', details: '', topic_id: '' });
+      fetchData();
     } catch (error) {
       console.error('Error adding concept:', error);
       setError('Failed to add concept. Please try again.');
+    }
+  };
+
+  const handleTopicSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('/api/add-topic', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newTopic),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to add topic');
+      }
+      setNewTopic({ name: '', details: '' });
+      fetchData();
+    } catch (error) {
+      console.error('Error adding topic:', error);
+      setError('Failed to add topic. Please try again.');
     }
   };
 
@@ -60,9 +93,9 @@ export function ConceptTest() {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Test Concepts</h1>
+      <h1 className="text-2xl font-bold mb-4">Test Concepts and Topics</h1>
       
-      <form onSubmit={handleSubmit} className="mb-8">
+      <form onSubmit={handleConceptSubmit} className="mb-8">
         <input
           type="text"
           value={newConcept.name}
@@ -79,17 +112,63 @@ export function ConceptTest() {
           className="border p-2 mr-2"
           required
         />
+        <select
+          value={newConcept.topic_id}
+          onChange={(e) => setNewConcept({ ...newConcept, topic_id: e.target.value })}
+          className="border p-2 mr-2"
+        >
+          <option value="">Select Topic</option>
+          {topics.map((topic) => (
+            <option key={topic.id} value={topic.id}>{topic.name}</option>
+          ))}
+        </select>
         <button type="submit" className="bg-blue-500 text-white p-2 rounded">Add Concept</button>
       </form>
 
+      <form onSubmit={handleTopicSubmit} className="mb-8">
+        <input
+          type="text"
+          value={newTopic.name}
+          onChange={(e) => setNewTopic({ ...newTopic, name: e.target.value })}
+          placeholder="Topic Name"
+          className="border p-2 mr-2"
+          required
+        />
+        <input
+          type="text"
+          value={newTopic.details}
+          onChange={(e) => setNewTopic({ ...newTopic, details: e.target.value })}
+          placeholder="Topic Details"
+          className="border p-2 mr-2"
+          required
+        />
+        <button type="submit" className="bg-green-500 text-white p-2 rounded">Add Topic</button>
+      </form>
+
+      <h2 className="text-xl font-semibold mb-2">Topics</h2>
+      {topics.length === 0 ? (
+        <p>No topics found.</p>
+      ) : (
+        <ul className="space-y-4 mb-8">
+          {topics.map((topic) => (
+            <li key={topic.id} className="border p-4 rounded-lg">
+              <h3 className="text-lg font-semibold">{topic.name}</h3>
+              <p className="mt-2">{topic.details}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <h2 className="text-xl font-semibold mb-2">Concepts</h2>
       {concepts.length === 0 ? (
         <p>No concepts found.</p>
       ) : (
         <ul className="space-y-4">
           {concepts.map((concept) => (
             <li key={concept.id} className="border p-4 rounded-lg">
-              <h2 className="text-xl font-semibold">{concept.name}</h2>
+              <h3 className="text-lg font-semibold">{concept.name}</h3>
               <p className="mt-2">{concept.details}</p>
+              {concept.topic_name && <p className="mt-2 text-sm text-gray-600">Topic: {concept.topic_name}</p>}
             </li>
           ))}
         </ul>

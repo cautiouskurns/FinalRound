@@ -3,12 +3,12 @@ import { getDb } from '../../../database/config';
 
 export async function POST(request: Request) {
   try {
-    const { name, details } = await request.json();
+    const { name, details, topic_id } = await request.json();
     const db = await getDb();
     
-    await db.run('INSERT INTO concepts (name, details) VALUES (?, ?)', [name, details]);
+    const result = await db.run('INSERT INTO concepts (name, details, topic_id) VALUES (?, ?, ?)', [name, details, topic_id]);
     
-    return NextResponse.json({ message: 'Concept added successfully' }, { status: 201 });
+    return NextResponse.json({ id: result.lastID, name, details, topic_id }, { status: 201 });
   } catch (error) {
     console.error('Error adding concept:', error);
     return NextResponse.json({ error: 'Failed to add concept' }, { status: 500 });
