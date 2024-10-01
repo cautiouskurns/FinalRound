@@ -151,7 +151,7 @@ export function ConceptTopicPage({ item, onClose, onBack }: ConceptTopicPageProp
                 </CardHeader>
                 <CardContent>
                   <Input
-                    placeholder="Search questions..."
+                    placeholder="Search questions....."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
