@@ -17,13 +17,14 @@ import BulkUserUpload from '@/components/BulkUserUpload'
 import { UserList } from '@/components/UserList'
 import AdvancedInterviewSimulation from '@/components/advanced-interview-simulation'
 import ConvaiTest from '@/components/ConvaiTest'
+import { ConceptTest } from '@/components/ConceptTest'  // Add this import
 
 // Remove or comment out these lines:
 // const HomePage = () => <div>Home Page Content</div>
 // const SettingsPage = () => <div>Settings Page Content</div>
 
 export default function Page() {
-  const [activeTab, setActiveTab] = useState<'home' | 'interview' | 'syllabus' | 'settings' | 'dashboard' | 'speechToText' | 'addUser' | 'convaiTest'>('home')
+  const [activeTab, setActiveTab] = useState<'home' | 'interview' | 'syllabus' | 'settings' | 'dashboard' | 'speechToText' | 'addUser' | 'convaiTest' | 'conceptTest'>('home')  // Add 'conceptTest' to the union type
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -111,6 +112,16 @@ export default function Page() {
               <MessageSquare className="h-4 w-4" />
               Convai Test
             </Link>
+
+            <Link
+              href="#"
+              onClick={() => setActiveTab('conceptTest')}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition-all hover:text-primary 
+                ${activeTab === 'conceptTest' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
+            >
+              <BookOpen className="h-4 w-4" />
+              Concept Test
+            </Link>
           </nav>
         </aside>
 
@@ -129,9 +140,9 @@ export default function Page() {
             </>
           )}
           {activeTab === 'convaiTest' && <ConvaiTest />}
+          {activeTab === 'conceptTest' && <ConceptTest />}  {/* Add this line */}
         </main>
       </div>
     </div>
   )
 }
-

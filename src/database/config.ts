@@ -1,8 +1,25 @@
-import { Sequelize } from 'sequelize';
+import sqlite3 from 'sqlite3'
+import { open } from 'sqlite'
 
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: './database.sqlite'
-});
+let db: any = null;
 
-export default sequelize;
+export async function getDb() {
+  if (!db) {
+    db = await open({
+      filename: './database.sqlite',
+      driver: sqlite3.Database
+    });
+  }
+  return db;
+}
+
+export async function initDb() {
+  const db = await getDb();
+  await db.exec(`
+    CREATE TABLE IF NOT EXISTS concepts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      details TEXT
+    )
+  `);
+}
