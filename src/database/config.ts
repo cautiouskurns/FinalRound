@@ -15,32 +15,48 @@ export async function getDb() {
 
 export async function initDb() {
   const db = await getDb();
-  await db.exec(`
-    CREATE TABLE IF NOT EXISTS topics (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      details TEXT
-    );
-
-    CREATE TABLE IF NOT EXISTS concepts (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      details TEXT
-    );
-
-    -- Check if topic_id column exists in concepts table
-    PRAGMA table_info(concepts);
-  `);
-
-  // Check if topic_id column exists
-  const columns = await db.all("PRAGMA table_info(concepts)");
-  const topicIdExists = columns.some(col => col.name === 'topic_id');
-
-  if (!topicIdExists) {
-    // Add topic_id column if it doesn't exist
+  
+  try {
+    // Create subjects table if it doesn't exist
     await db.exec(`
-      ALTER TABLE concepts ADD COLUMN topic_id INTEGER;
-      CREATE INDEX IF NOT EXISTS idx_concepts_topic_id ON concepts(topic_id);
+      CREATE TABLE IF NOT EXISTS subjects (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        details TEXT
+      );
     `);
+
+    // Create topics table if it doesn't exist
+    await db.exec(`
+      CREATE TABLE IF NOT EXISTS topics (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        details TEXT,
+        subject_id INTEGER,
+        FOREIGN KEY (subject_id) REFERENCES subjects(id)
+      );
+    `);
+
+    // Create concepts table if it doesn't exist
+    await db.exec(`
+      CREATE TABLE IF NOT EXISTS concepts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        details TEXT,
+        topic_id INTEGER,
+        FOREIGN KEY (topic_id) REFERENCES topics(id)
+      );
+    `);
+
+    // Add subject_id column to topics table if it doesn't exist
+    const topicColumns = await db.all("PRAGMA table_info(topics)");
+    const subjectIdExists = topicColumns.some(col => col.name === 'subject_id');
+    if (!subjectIdExists) {
+      await db.exec(`ALTER TABLE topics ADD COLUMN subject_id INTEGER;`);
+    }
+
+    console.log('Database initialized successfully');
+  } catch (error) {
+    console.error('Error initializing database:', error);
   }
 }

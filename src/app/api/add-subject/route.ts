@@ -3,15 +3,12 @@ import { getDb } from '../../../database/config';
 
 export async function POST(request: Request) {
   try {
-    const { name } = await request.json();
+    const { name, details } = await request.json();
     const db = await getDb();
     
-    await db.run('INSERT INTO subjects (name) VALUES (?)', [name]);
+    const result = await db.run('INSERT INTO subjects (name, details) VALUES (?, ?)', [name, details]);
     
-    return NextResponse.json({ 
-      message: 'Subject added successfully',
-      name 
-    }, { status: 201 });
+    return NextResponse.json({ id: result.lastID, name, details }, { status: 201 });
   } catch (error) {
     console.error('Error adding subject:', error);
     return NextResponse.json({ error: 'Failed to add subject' }, { status: 500 });

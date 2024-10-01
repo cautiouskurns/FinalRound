@@ -9,25 +9,23 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type');
 
-    if (type === 'topics') {
-      const topics = await db.all('SELECT * FROM topics');
+    if (type === 'subjects') {
+      const subjects = await db.all('SELECT * FROM subjects');
+      return NextResponse.json(subjects);
+    } else if (type === 'topics') {
+      const topics = await db.all(`
+        SELECT t.*, s.name as subject_name 
+        FROM topics t
+        LEFT JOIN subjects s ON t.subject_id = s.id
+      `);
       return NextResponse.json(topics);
     } else {
-      // Existing code for fetching concepts
-      const columns = await db.all("PRAGMA table_info(concepts)");
-      const topicIdExists = columns.some(col => col.name === 'topic_id');
-
-      let concepts;
-      if (topicIdExists) {
-        concepts = await db.all(`
-          SELECT c.*, t.name as topic_name 
-          FROM concepts c
-          LEFT JOIN topics t ON c.topic_id = t.id
-        `);
-      } else {
-        concepts = await db.all('SELECT * FROM concepts');
-      }
-
+      const concepts = await db.all(`
+        SELECT c.*, t.name as topic_name, s.name as subject_name
+        FROM concepts c
+        LEFT JOIN topics t ON c.topic_id = t.id
+        LEFT JOIN subjects s ON t.subject_id = s.id
+      `);
       return NextResponse.json(concepts);
     }
   } catch (error) {
