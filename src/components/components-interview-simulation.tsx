@@ -18,32 +18,37 @@ import dynamic from 'next/dynamic'
 import type { editor } from 'monaco-editor'
 
 interface Question {
-  question: string
-  questionCode?: string
-  answer: string
-  answerCode?: string
-  hint: string
-  subject: string
-  topic: string
-  concept: string
-  type: 'technical' | 'competency'
+  id: number;
+  question: string;
+  answer: string;
+  question_code?: string;
+  answer_code?: string;
+  subject?: string;
+  topic?: string;
+  concept?: string;
+  hint?: string;
+  type?: 'technical' | 'competency';
 }
 
 interface Concept {
-  name: string
-  details: string
-  questions: Question[]
+  id: number;
+  name: string;
+  details: string;
+  code_example?: string;
+  questions: Question[];
 }
 
 interface Topic {
-  name: string
-  details: string
-  concepts: Concept[]
+  id: number;
+  name: string;
+  details: string;
+  concepts: Concept[];
 }
 
 interface Subject {
-  name: string
-  topics: Topic[]
+  id: number;
+  name: string;
+  topics: Topic[];
 }
 
 interface FeedbackItem {
@@ -168,6 +173,14 @@ export function InterviewSimulation() {
   const [activeTab, setActiveTab] = useState<string>('interview')
   const [codeOutput, setCodeOutput] = useState('')
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
+  const [subjects, setSubjects] = useState<Subject[]>([])
+  const [selectedSubject, setSelectedSubject] = useState<string>('all')
+  const [selectedTopic, setSelectedTopic] = useState<string>('all')
+  const [appliedFilters, setAppliedFilters] = useState({
+    questionType: 'all',
+    subject: 'all',
+    topic: 'all'
+  })
 
   const handleSubmitText = useCallback(() => {
     setIsTextSubmitted(true)
@@ -178,10 +191,11 @@ export function InterviewSimulation() {
   }, [])
 
   useEffect(() => {
-    fetch('/data/syllabus.json')
+    fetch('/api/syllabus')
       .then(response => response.json())
       .then(data => {
         console.log('Fetched data:', data);
+        setSubjects(data);
         const allQuestions = data.flatMap((subject: Subject) =>
           subject.topics.flatMap((topic: Topic) =>
             topic.concepts.flatMap((concept: Concept) =>
@@ -191,7 +205,7 @@ export function InterviewSimulation() {
                 topic: topic.name,
                 concept: concept.name,
                 hint: concept.details,
-                type: question.questionCode ? 'technical' : 'competency' // Assuming questions with code are technical
+                type: question.question_code ? 'technical' : 'competency'
               }))
             )
           )
@@ -200,12 +214,24 @@ export function InterviewSimulation() {
         setQuestions(allQuestions)
         setCurrentQuestion(allQuestions[0])
       })
+      .catch(error => {
+        console.error('Error fetching syllabus:', error);
+      });
   }, [])
 
   const filteredQuestions = useMemo(() => {
-    if (questionType === 'all') return questions;
-    return questions.filter(q => q.type === questionType);
-  }, [questions, questionType])
+    return questions.filter(q => 
+      (appliedFilters.questionType === 'all' || q.type === appliedFilters.questionType) &&
+      (appliedFilters.subject === 'all' || q.subject === appliedFilters.subject) &&
+      (appliedFilters.topic === 'all' || q.topic === appliedFilters.topic)
+    );
+  }, [questions, appliedFilters])
+
+  const topics = useMemo(() => {
+    if (selectedSubject === 'all') return [];
+    const subject = subjects.find(s => s.name === selectedSubject);
+    return subject ? subject.topics : [];
+  }, [subjects, selectedSubject])
 
   const { currentSubject, currentTopic, currentConcept } = useMemo(() => {
     console.log('Current question:', currentQuestion);
@@ -219,16 +245,29 @@ export function InterviewSimulation() {
 
   console.log('Breadcrumb values:', { currentSubject, currentTopic, currentConcept });
 
-  const handleNextQuestion = () => {
-    const currentIndex = questions.findIndex(q => q.question === currentQuestion?.question)
-    const nextIndex = currentIndex + 1
-    if (nextIndex < questions.length) {
-      setCurrentQuestion(questions[nextIndex])
-      setUserAnswer('')
-      setShowHint(false)
-      setShowAnswer(false)
+  const applyFilters = useCallback(() => {
+    const newFilters = {
+      questionType,
+      subject: selectedSubject,
+      topic: selectedTopic
+    };
+
+    setAppliedFilters(newFilters);
+
+    const newFilteredQuestions = questions.filter(q => 
+      (newFilters.questionType === 'all' || q.type === newFilters.questionType) &&
+      (newFilters.subject === 'all' || q.subject === newFilters.subject) &&
+      (newFilters.topic === 'all' || q.topic === newFilters.topic)
+    );
+
+    if (newFilteredQuestions.length > 0) {
+      setCurrentQuestion(newFilteredQuestions[0]);
+      setCurrentQuestionIndex(0);
+    } else {
+      setCurrentQuestion(null);
+      setCurrentQuestionIndex(-1);
     }
-  }
+  }, [questions, questionType, selectedSubject, selectedTopic]);
 
   const handleShowHint = () => {
     setShowHint(true)
@@ -282,6 +321,30 @@ export function InterviewSimulation() {
     }
   }
 
+  const handleNextQuestion = useCallback(() => {
+    if (currentQuestionIndex < filteredQuestions.length - 1) {
+      setCurrentQuestionIndex(prevIndex => prevIndex + 1);
+      setCurrentQuestion(filteredQuestions[currentQuestionIndex + 1]);
+      resetQuestionState();
+    }
+  }, [currentQuestionIndex, filteredQuestions]);
+
+  const handlePreviousQuestion = useCallback(() => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(prevIndex => prevIndex - 1);
+      setCurrentQuestion(filteredQuestions[currentQuestionIndex - 1]);
+      resetQuestionState();
+    }
+  }, [currentQuestionIndex, filteredQuestions]);
+
+  const resetQuestionState = () => {
+    setUserAnswer('');
+    setShowHint(false);
+    setShowAnswer(false);
+    setIsSubmitted(false);
+    // Reset any other question-specific state here
+  };
+
   if (!currentQuestion) {
     return <div>Loading...</div>
   }
@@ -296,23 +359,29 @@ export function InterviewSimulation() {
           <TabsTrigger value="feedback">Feedback</TabsTrigger>
         </TabsList>
         <TabsContent value="interview">
-          <Breadcrumb className="mb-4">
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink>{currentSubject}</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink>{currentTopic}</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>{currentConcept}</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-
           <div className="mb-4">
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink>{appliedFilters.subject === 'all' ? 'All Subjects' : appliedFilters.subject}</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                {appliedFilters.subject !== 'all' && (
+                  <>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink>{appliedFilters.topic === 'all' ? 'All Topics' : appliedFilters.topic}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                  </>
+                )}
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{currentConcept}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+
+          <div className="mb-4 flex space-x-4">
             <Select value={questionType} onValueChange={(value: any) => setQuestionType(value)}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Question Type" />
@@ -323,14 +392,40 @@ export function InterviewSimulation() {
                 <SelectItem value="competency">Competency</SelectItem>
               </SelectContent>
             </Select>
+
+            <Select value={selectedSubject} onValueChange={setSelectedSubject}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select Subject" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Subjects</SelectItem>
+                {subjects.map(subject => (
+                  <SelectItem key={subject.id} value={subject.name}>{subject.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={selectedTopic} onValueChange={setSelectedTopic} disabled={selectedSubject === 'all'}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select Topic" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Topics</SelectItem>
+                {topics.map(topic => (
+                  <SelectItem key={topic.id} value={topic.name}>{topic.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Button onClick={applyFilters}>Apply Filters</Button>
           </div>
 
           <Card className="mb-4">
             <CardHeader>
               <CardTitle>{currentQuestion.question}</CardTitle>
-              {currentQuestion.questionCode && (
+              {currentQuestion.question_code && (
                 <SafeSyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2">
-                  {currentQuestion.questionCode || ''}
+                  {currentQuestion.question_code || ''}
                 </SafeSyntaxHighlighter>
               )}
             </CardHeader>
@@ -394,17 +489,17 @@ export function InterviewSimulation() {
                 </div>
               )}
 
-              {isSubmitted && currentQuestion.type === 'technical' && currentQuestion.answerCode && (
+              {isSubmitted && currentQuestion.type === 'technical' && currentQuestion.answer_code && (
                 <div className="mb-4">
                   <h3 className="font-bold mb-2">Code Answer Comparison:</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <h4 className="font-semibold">Your Code:</h4>
-                      <DiffView userAnswer={userCodeAnswer} correctAnswer={currentQuestion.answerCode} language="javascript" />
+                      <DiffView userAnswer={userCodeAnswer} correctAnswer={currentQuestion.answer_code} language="javascript" />
                     </div>
                     <div>
                       <h4 className="font-semibold">Correct Code:</h4>
-                      <DiffView userAnswer={currentQuestion.answerCode} correctAnswer={userCodeAnswer} language="javascript" />
+                      <DiffView userAnswer={currentQuestion.answer_code} correctAnswer={userCodeAnswer} language="javascript" />
                     </div>
                   </div>
                 </div>
@@ -415,9 +510,9 @@ export function InterviewSimulation() {
                   <AlertTitle>Correct Answer</AlertTitle>
                   <AlertDescription>
                     {currentQuestion.answer}
-                    {currentQuestion.answerCode && (
+                    {currentQuestion.answer_code && (
                       <SafeSyntaxHighlighter language="javascript" style={vscDarkPlus} className="mt-2">
-                        {currentQuestion.answerCode || ''}
+                        {currentQuestion.answer_code || ''}
                       </SafeSyntaxHighlighter>
                     )}
                   </AlertDescription>
@@ -432,6 +527,11 @@ export function InterviewSimulation() {
           <FeedbackPage feedback={feedback} />
         </TabsContent>
       </Tabs>
+
+      <div className="mt-4 flex justify-between">
+        <Button onClick={handlePreviousQuestion} disabled={currentQuestionIndex === 0}>Previous</Button>
+        <Button onClick={handleNextQuestion} disabled={currentQuestionIndex === filteredQuestions.length - 1}>Next</Button>
+      </div>
     </div>
   )
 }
