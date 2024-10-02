@@ -139,7 +139,7 @@ export function ConceptTest() {
       if (typeof text === 'string') {
         try {
           const syllabusData = JSON.parse(text);
-          const response = await fetch('/api/import-syllabus', {
+          const response = await fetch('/api/syllabus', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
