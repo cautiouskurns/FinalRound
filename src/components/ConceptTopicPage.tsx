@@ -238,7 +238,10 @@ function CodeExamples({ concept }: { concept: Concept }) {
 }
 
 function QuestionTable({ concept, searchQuery }: { concept: Concept, searchQuery: string }) {
-  const [questions, setQuestions] = useState<Question[]>(concept.questions || []);
+  const [questions, setQuestions] = useState<Question[]>(() => {
+    console.log('Initial questions:', (concept as any).questions);
+    return (concept as any).questions || [];
+  });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -247,6 +250,8 @@ function QuestionTable({ concept, searchQuery }: { concept: Concept, searchQuery
     q.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
     q.answer.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  console.log('Filtered questions:', filteredQuestions);
 
   const openAddDialog = () => {
     setEditingQuestion({ question: '', answer: '' });
@@ -292,16 +297,22 @@ function QuestionTable({ concept, searchQuery }: { concept: Concept, searchQuery
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredQuestions.map((q, index) => (
-            <TableRow key={index}>
-              <TableCell>{q.question}</TableCell>
-              <TableCell>{q.answer}</TableCell>
-              <TableCell>
-                <Button onClick={() => openEditDialog(q, index)} variant="outline" size="sm" className="mr-2">Edit</Button>
-                <Button onClick={() => removeQuestion(index)} variant="destructive" size="sm">Remove</Button>
-              </TableCell>
+          {filteredQuestions.length > 0 ? (
+            filteredQuestions.map((q, index) => (
+              <TableRow key={index}>
+                <TableCell>{q.question}</TableCell>
+                <TableCell>{q.answer}</TableCell>
+                <TableCell>
+                  <Button onClick={() => openEditDialog(q, index)} variant="outline" size="sm" className="mr-2">Edit</Button>
+                  <Button onClick={() => removeQuestion(index)} variant="destructive" size="sm">Remove</Button>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={3} className="text-center">No questions found</TableCell>
             </TableRow>
-          ))}
+          )}
           <TableRow>
             <TableCell colSpan={3}>
               <Button onClick={openAddDialog} variant="outline" size="sm" className="w-full">Add Question</Button>

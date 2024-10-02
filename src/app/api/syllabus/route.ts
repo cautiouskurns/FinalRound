@@ -60,6 +60,14 @@ export async function GET(request: Request) {
           FROM concepts
           WHERE topic_id = ?
         `, [topic.id]);
+
+        for (const concept of topic.concepts) {
+          concept.questions = await db.all(`
+            SELECT id, question, answer, question_code, answer_code
+            FROM questions
+            WHERE concept_id = ?
+          `, [concept.id]);
+        }
       }
     }
 
@@ -71,9 +79,10 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  let db;
   try {
     await initDb();
-    const db = await getDb();
+    db = await getDb();
 
     // Ensure tables exist
     await ensureTablesExist(db);
@@ -103,12 +112,16 @@ export async function POST(request: Request) {
           console.log(`Inserting concept: ${concept.name}`);
           const { lastID: conceptId } = await db.run('INSERT INTO concepts (name, details, code_example, topic_id) VALUES (?, ?, ?, ?)', 
             concept.name, concept.details, concept.codeExample, topicId);
+          
+          console.log(`Concept ID: ${conceptId}`);
 
-          if (concept.questions) {
+          if (concept.questions && Array.isArray(concept.questions)) {
             for (const question of concept.questions) {
               console.log(`Inserting question: ${question.question.substring(0, 30)}...`);
-              await db.run('INSERT INTO questions (question, answer, question_code, answer_code, concept_id) VALUES (?, ?, ?, ?, ?)', 
+              const { lastID: questionId } = await db.run('INSERT INTO questions (question, answer, question_code, answer_code, concept_id) VALUES (?, ?, ?, ?, ?)', 
                 question.question, question.answer, question.questionCode, question.answerCode, conceptId);
+              
+              console.log(`Question ID: ${questionId}, associated with Concept ID: ${conceptId}`);
             }
           }
         }
@@ -117,9 +130,20 @@ export async function POST(request: Request) {
 
     await db.run('COMMIT');
     console.log('Syllabus import completed successfully');
+
+    // Verify the data after insertion
+    const conceptsWithQuestions = await db.all(`
+      SELECT c.id as concept_id, c.name as concept_name, q.id as question_id, q.question
+      FROM concepts c
+      LEFT JOIN questions q ON c.id = q.concept_id
+      ORDER BY c.id, q.id
+    `);
+    console.log('Concepts with questions:', JSON.stringify(conceptsWithQuestions, null, 2));
+
     return NextResponse.json({ message: 'Syllabus updated successfully' }, { status: 200 });
   } catch (error) {
     console.error('Error importing syllabus:', error);
+    if (db) await db.run('ROLLBACK');
     return NextResponse.json({ error: 'Failed to import syllabus', details: (error as Error).message }, { status: 500 });
   }
 }

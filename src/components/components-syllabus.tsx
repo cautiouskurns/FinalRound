@@ -29,6 +29,11 @@ export interface Subject {
   topics: Topic[];
 }
 
+export interface Question {
+  question: string;
+  answer: string;
+}
+
 export function Syllabus() {
   const [syllabusData, setSyllabusData] = useState<Subject[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<string>('')
