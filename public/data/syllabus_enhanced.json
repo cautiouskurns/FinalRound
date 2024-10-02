@@ -374,5 +374,72 @@
         ]
       }
     ]
+  },
+  {
+    "name": "General Relativity",
+    "topics": [
+      {
+        "name": "MHD",
+        "details": "Magneto Hydro Dynamics",
+        "concepts": [
+          {
+            "name": "Maxwell's Equations",
+            "details": "Maxwell's Equations Details",
+            "questions": [
+              {
+                "question": "Maxwell's Equations Q1?",
+                "answer": "Maxwell's Equations A1",
+                "questionCode": "// Regular function\nfunction greet(name) {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\n// Arrow function\nconst greetArrow = (name) => {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\nconst person = { title: 'Mr.' };\ngreet.call(person, 'John');\ngreetArrow.call(person, 'John');",
+                "answerCode": "// Output:\n// Hello, Mr. John\n// Hello, undefined John\n\n// The regular function's 'this' is set to the 'person' object\n// The arrow function's 'this' remains the global object (or undefined in strict mode)"
+              }
+            ],
+            "codeExample": "// Regular function\nfunction add(a, b) {\n  return a + b;\n}\n\n// Arrow function\nconst multiply = (a, b) => a * b;\n\nconsole.log(add(2, 3));\nconsole.log(multiply(4, 5));"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "General Relativity 2",
+    "topics": [
+      {
+        "name": "MHD",
+        "details": "Magneto Hydro Dynamics",
+        "concepts": [
+          {
+            "name": "Maxwell's Equations",
+            "details": "Maxwell's Equations Details",
+            "questions": [
+              {
+                "question": "Maxwell's Equations Q1?",
+                "answer": "Maxwell's Equations A1",
+                "questionCode": "// Regular function\nfunction greet(name) {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\n// Arrow function\nconst greetArrow = (name) => {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\nconst person = { title: 'Mr.' };\ngreet.call(person, 'John');\ngreetArrow.call(person, 'John');",
+                "answerCode": "// Output:\n// Hello, Mr. John\n// Hello, undefined John\n\n// The regular function's 'this' is set to the 'person' object\n// The arrow function's 'this' remains the global object (or undefined in strict mode)"
+              }
+            ],
+            "codeExample": "// Regular function\nfunction add(a, b) {\n  return a + b;\n}\n\n// Arrow function\nconst multiply = (a, b) => a * b;\n\nconsole.log(add(2, 3));\nconsole.log(multiply(4, 5));"
+          }
+        ]
+      },
+      {
+        "name": "MHD 2",
+        "details": "Magneto Hydro Dynamics",
+        "concepts": [
+          {
+            "name": "Maxwell's Equations",
+            "details": "Maxwell's Equations Details",
+            "questions": [
+              {
+                "question": "Maxwell's Equations Q1?",
+                "answer": "Maxwell's Equations A1",
+                "questionCode": "// Regular function\nfunction greet(name) {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\n// Arrow function\nconst greetArrow = (name) => {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\nconst person = { title: 'Mr.' };\ngreet.call(person, 'John');\ngreetArrow.call(person, 'John');",
+                "answerCode": "// Output:\n// Hello, Mr. John\n// Hello, undefined John\n\n// The regular function's 'this' is set to the 'person' object\n// The arrow function's 'this' remains the global object (or undefined in strict mode)"
+              }
+            ],
+            "codeExample": "// Regular function\nfunction add(a, b) {\n  return a + b;\n}\n\n// Arrow function\nconst multiply = (a, b) => a * b;\n\nconsole.log(add(2, 3));\nconsole.log(multiply(4, 5));"
+          }
+        ]
+      }
+    ]
   }
 ]

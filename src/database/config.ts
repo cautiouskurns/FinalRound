@@ -1,7 +1,7 @@
 import sqlite3 from 'sqlite3'
-import { open } from 'sqlite'
+import { open, Database as SqliteDatabase } from 'sqlite'
 
-let db: any = null;
+let db: SqliteDatabase | null = null;
 
 export async function getDb() {
   if (!db) {
@@ -42,7 +42,7 @@ export async function initDb() {
 
     // Check if code_example column exists in concepts table
     const columns = await db.all("PRAGMA table_info(concepts)");
-    const codeExampleExists = columns.some(col => col.name === 'code_example');
+    const codeExampleExists = columns.some((col: { name: string }) => col.name === 'code_example');
 
     if (!codeExampleExists) {
       // Add code_example column if it doesn't exist
@@ -56,3 +56,5 @@ export async function initDb() {
     console.error('Error initializing database:', error);
   }
 }
+
+export type Database = SqliteDatabase;
