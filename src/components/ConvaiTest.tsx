@@ -5,6 +5,7 @@ import { ConvaiClient } from "convai-web-sdk"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { Question } from '@/types';
 
 const ConvaiTest: React.FC = () => {
   const [userText, setUserText] = useState("")

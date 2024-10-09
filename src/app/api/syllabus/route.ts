@@ -32,6 +32,7 @@ async function ensureTablesExist(db: any) {
       question_code TEXT,
       answer_code TEXT,
       concept_id INTEGER,
+      question_type TEXT CHECK(question_type IN ('technical', 'general', 'competency')),
       FOREIGN KEY (concept_id) REFERENCES concepts(id)
     );
   `);
@@ -67,6 +68,12 @@ export async function GET(request: Request) {
             FROM questions
             WHERE concept_id = ?
           `, [concept.id]);
+
+          // Add question_type to each question
+          concept.questions = concept.questions.map(q => ({
+            ...q,
+            question_type: determineQuestionType(q)
+          }));
         }
       }
     }
@@ -76,6 +83,12 @@ export async function GET(request: Request) {
     console.error('Error fetching syllabus:', error);
     return NextResponse.json({ error: 'Failed to fetch syllabus' }, { status: 500 });
   }
+}
+
+function determineQuestionType(question: any): string {
+  if (question.question_code) return 'technical';
+  // Add more conditions as needed
+  return 'general';
 }
 
 export async function POST(request: Request) {

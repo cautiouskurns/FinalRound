@@ -14,11 +14,13 @@
                 "question": "What is the significance of indentation in Python?",
                 "answer": "Indentation is used to define code blocks in Python, such as in functions, loops, and conditional statements.",
                 "questionCode": "def greet(name):\nprint(f'Hello, {name}!')\n    if name == 'Alice':\n    print('Welcome back, Alice!')\n\ngreet('Bob')\ngreet('Alice')",
-                "answerCode": "def greet(name):\n    print(f'Hello, {name}!')\n    if name == 'Alice':\n        print('Welcome back, Alice!')\n\ngreet('Bob')\ngreet('Alice')"
+                "answerCode": "def greet(name):\n    print(f'Hello, {name}!')\n    if name == 'Alice':\n        print('Welcome back, Alice!')\n\ngreet('Bob')\ngreet('Alice')",
+                "questionType": "technical"
               },
               {
                 "question": "How many spaces are typically used for indentation in Python?",
-                "answer": "4 spaces are commonly used for indentation, although the exact number is not enforced by the language."
+                "answer": "4 spaces are commonly used for indentation, although the exact number is not enforced by the language.",
+                "questionType": "general"
               }
             ],
             "codeExample": "def greet(name):\n    print(f'Hello, {name}!')\n    if name == 'Alice':\n        print('Welcome back, Alice!')\n\ngreet('Bob')\ngreet('Alice')"
@@ -31,11 +33,13 @@
                 "question": "Explain the difference between '=' and '==' in Python.",
                 "answer": "'=' is used for assignment, while '==' is used for comparison.",
                 "questionCode": "x = 5\ny = 5\nprint(x = y)  # What will this do?\nprint(x == y)  # What will this do?",
-                "answerCode": "x = 5\ny = 5\n# print(x = y)  # This would cause a SyntaxError\nprint(x == y)  # This will print: True"
+                "answerCode": "x = 5\ny = 5\n# print(x = y)  # This would cause a SyntaxError\nprint(x == y)  # This will print: True",
+                "questionType": "technical"
               },
               {
                 "question": "What is variable naming convention in Python?",
-                "answer": "Variable names should be lowercase, with words separated by underscores as necessary to improve readability (snake_case)."
+                "answer": "Variable names should be lowercase, with words separated by underscores as necessary to improve readability (snake_case).",
+                "questionType": "general"
               }
             ],
             "codeExample": "x = 5\ny = 10\nresult = x == y\nprint(f'Is x equal to y? {result}')"
@@ -52,11 +56,14 @@
             "questions": [
               {
                 "question": "Write a Python if-elif-else statement to classify a person's age group.",
-                "answer": "Here's an example:\nage = 25\nif age < 18:\n    print('Minor')\nelif age < 65:\n    print('Adult')\nelse:\n    print('Senior')"
+                "answer": "Here's an example:\nage = 25\nif age < 18:\n    print('Minor')\nelif age < 65:\n    print('Adult')\nelse:\n    print('Senior')",
+                "questionType": "general"
               },
               {
                 "question": "What is the purpose of the 'elif' statement in Python?",
-                "answer": "'elif' is short for 'else if'. It allows you to check multiple conditions after the initial 'if' statement."
+                "answer": "'elif' is short for 'else if'. It allows you to check multiple conditions after the initial 'if' statement.",
+                "questionType": "general"
+
               }
             ],
             "codeExample": "score = 85\nif score >= 90:\n    grade = 'A'\nelif score >= 80:\n    grade = 'B'\nelif score >= 70:\n    grade = 'C'\nelse:\n    grade = 'F'\nprint(f'Your grade is: {grade}')"
@@ -67,11 +74,13 @@
             "questions": [
               {
                 "question": "How can you iterate over a list using a for loop in Python?",
-                "answer": "Example: for item in my_list:\n    print(item)"
+                "answer": "Example: for item in my_list:\n    print(item)",
+                "questionType": "general"
               },
               {
                 "question": "How can you use the range() function in a for loop?",
-                "answer": "The range() function can be used to generate a sequence of numbers. Example: for i in range(5):\n    print(i)"
+                "answer": "The range() function can be used to generate a sequence of numbers. Example: for i in range(5):\n    print(i)",
+                "questionType": "general"
               }
             ],
             "codeExample": "fruits = ['apple', 'banana', 'cherry']\nfor fruit in fruits:\n    print(f'I like {fruit}')\n\nfor i in range(1, 5):\n    print(f'{i} squared is {i**2}')"
@@ -88,11 +97,13 @@
             "questions": [
               {
                 "question": "How do you add an item to the end of a list in Python?",
-                "answer": "You can use the append() method. Example: my_list.append(new_item)"
+                "answer": "You can use the append() method. Example: my_list.append(new_item)",
+                "questionType": "general"
               },
               {
                 "question": "What is list slicing in Python?",
-                "answer": "List slicing is a way to access a range of elements in a list. Syntax: list[start:end:step]"
+                "answer": "List slicing is a way to access a range of elements in a list. Syntax: list[start:end:step]",
+                "questionType": "general"
               }
             ],
             "codeExample": "numbers = [1, 2, 3, 4, 5]\nnumbers.append(6)\nprint(numbers)\nprint(numbers[1:4])\nprint(numbers[::-1])  # Reverse the list"
@@ -103,11 +114,13 @@
             "questions": [
               {
                 "question": "How do you access a value in a dictionary?",
-                "answer": "You can access a value using its key. Example: my_dict['key']"
+                "answer": "You can access a value using its key. Example: my_dict['key']",
+                "questionType": "general"
               },
               {
                 "question": "What happens if you try to access a key that doesn't exist in a dictionary?",
-                "answer": "It raises a KeyError. You can use the get() method to provide a default value instead."
+                "answer": "It raises a KeyError. You can use the get() method to provide a default value instead.",
+                "questionType": "general"
               }
             ],
             "codeExample": "person = {'name': 'Alice', 'age': 30, 'city': 'New York'}\nprint(person['name'])\nprint(person.get('job', 'Not specified'))\n\nfor key, value in person.items():\n    print(f'{key}: {value}')"
@@ -131,7 +144,8 @@
                 "question": "What is the difference between regular functions and arrow functions in JavaScript?",
                 "answer": "Arrow functions have a more concise syntax and do not bind their own 'this' value.",
                 "questionCode": "// Regular function\nfunction greet(name) {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\n// Arrow function\nconst greetArrow = (name) => {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\nconst person = { title: 'Mr.' };\ngreet.call(person, 'John');\ngreetArrow.call(person, 'John');",
-                "answerCode": "// Output:\n// Hello, Mr. John\n// Hello, undefined John\n\n// The regular function's 'this' is set to the 'person' object\n// The arrow function's 'this' remains the global object (or undefined in strict mode)"
+                "answerCode": "// Output:\n// Hello, Mr. John\n// Hello, undefined John\n\n// The regular function's 'this' is set to the 'person' object\n// The arrow function's 'this' remains the global object (or undefined in strict mode)",
+                "questionType": "technical"
               }
             ],
             "codeExample": "// Regular function\nfunction add(a, b) {\n  return a + b;\n}\n\n// Arrow function\nconst multiply = (a, b) => a * b;\n\nconsole.log(add(2, 3));\nconsole.log(multiply(4, 5));"
@@ -142,7 +156,8 @@
             "questions": [
               {
                 "question": "How can you use destructuring to swap two variables in JavaScript?",
-                "answer": "You can use array destructuring: [a, b] = [b, a]"
+                "answer": "You can use array destructuring: [a, b] = [b, a]",
+                "questionType": "general"
               }
             ],
             "codeExample": "const person = { name: 'Alice', age: 30 };\nconst { name, age } = person;\nconsole.log(name, age);\n\nconst colors = ['red', 'green', 'blue'];\nconst [firstColor, secondColor] = colors;\nconsole.log(firstColor, secondColor);"
@@ -166,13 +181,15 @@
                 "question": "What is the conventional alias used when importing pandas?",
                 "answer": "The conventional alias for pandas is 'pd'.",
                 "questionCode": "import pandas\n\ndf = pandas.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(df)",
-                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(df)"
+                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(df)",
+                "questionType": "general"
               },
               {
                 "question": "How can you check the version of pandas you're using?",
                 "answer": "You can check the pandas version by accessing the '__version__' attribute.",
                 "questionCode": "import pandas as pd\n# How would you print the pandas version?",
-                "answerCode": "import pandas as pd\nprint(pd.__version__)"
+                "answerCode": "import pandas as pd\nprint(pd.__version__)",
+                "questionType": "general"
               }
             ],
             "codeExample": "import pandas as pd\n\n# Creating a simple DataFrame\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(df)"
@@ -185,12 +202,15 @@
                 "question": "What is a pandas DataFrame?",
                 "answer": "A DataFrame is a 2-dimensional labeled data structure with columns of potentially different types.",
                 "questionCode": "import pandas as pd\n\n# Create a DataFrame\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': ['a', 'b', 'c']})\n\n# What will this print?\nprint(type(df))",
-                "answerCode": "import pandas as pd\n\n# Create a DataFrame\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': ['a', 'b', 'c']})\n\n# This will print:\nprint(type(df))  # <class 'pandas.core.frame.DataFrame'>"
+                "answerCode": "import pandas as pd\n\n# Create a DataFrame\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': ['a', 'b', 'c']})\n\n# This will print:\nprint(type(df))  # <class 'pandas.core.frame.DataFrame'>",
+                "questionType": "technical"
               },
               {
                 "question": "How can you create an empty DataFrame?",
                 "answer": "You can create an empty DataFrame using pd.DataFrame() without any arguments.",
-                "questionCode": "import pandas as pd\n\n# Create an empty DataFrame\nempty_df = pd.DataFrame()\n\n# What will this print?\nprint(empty_df)"
+                "questionCode": "import pandas as pd\n\n# Create an empty DataFrame\nempty_df = pd.DataFrame()\n\n# What will this print?\nprint(empty_df)",
+                "answerCode": "import pandas as pd\n\n# Create an empty DataFrame\nempty_df = pd.DataFrame()\n\n# This will print:\nprint(empty_df)",
+                "questionType": "technical"
               }
             ],
             "codeExample": "import pandas as pd\n\n# Creating a DataFrame from a dictionary\ndata = {'Name': ['John', 'Anna', 'Peter'], 'Age': [28, 34, 29]}\ndf = pd.DataFrame(data)\nprint(df)"
@@ -203,13 +223,15 @@
                 "question": "How can you get the number of rows and columns in a DataFrame?",
                 "answer": "You can use the 'shape' attribute of a DataFrame to get a tuple of (rows, columns).",
                 "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\n# How would you print the number of rows and columns?",
-                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(df.shape)  # This will print: (3, 2)"
+                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(df.shape)  # This will print: (3, 2)",
+                "questionType": "technical"
               },
               {
                 "question": "What attribute would you use to get the column names of a DataFrame?",
                 "answer": "You can use the 'columns' attribute to get the column names of a DataFrame.",
                 "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\n# How would you print the column names?",
-                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(df.columns)  # This will print: Index(['A', 'B'], dtype='object')"
+                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(df.columns)  # This will print: Index(['A', 'B'], dtype='object')",
+                "questionType": "technical"
               }
             ],
             "codeExample": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(f'Shape: {df.shape}')\nprint(f'Columns: {df.columns}')\nprint(f'Index: {df.index}')\nprint(f'Data types:\\n{df.dtypes}')"
@@ -222,13 +244,15 @@
                 "question": "How can you check the data types of columns in a DataFrame?",
                 "answer": "You can use the 'dtypes' attribute of a DataFrame to check the data types of its columns.",
                 "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': ['a', 'b', 'c']})\n# How would you print the data types of the columns?",
-                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': ['a', 'b', 'c']})\nprint(df.dtypes)"
+                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': ['a', 'b', 'c']})\nprint(df.dtypes)",
+                "questionType": "technical"
               },
               {
                 "question": "What is the default data type for numeric data in pandas?",
                 "answer": "The default data type for numeric data in pandas is 'float64'.",
                 "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3]})\n# What will be the data type of column 'A'?",
-                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3]})\nprint(df['A'].dtype)  # This will print: float64"
+                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3]})\nprint(df['A'].dtype)  # This will print: float64",
+                "questionType": "technical"
               }
             ],
             "codeExample": "import pandas as pd\n\ndf = pd.DataFrame({\n    'A': [1, 2, 3],\n    'B': ['a', 'b', 'c'],\n    'C': [1.1, 2.2, 3.3],\n    'D': [True, False, True]\n})\nprint(df.dtypes)"
@@ -241,13 +265,15 @@
                 "question": "What are two ways to select a single column from a DataFrame?",
                 "answer": "You can select a column using either dot notation (df.column_name) or square brackets (df['column_name']).",
                 "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\n# How would you select column 'A' in two different ways?",
-                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(df.A)  # or\nprint(df['A'])"
+                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nprint(df.A)  # or\nprint(df['A'])",
+                "questionType": "technical"
               },
               {
                 "question": "What is the difference between selecting a column with dot notation and square brackets?",
                 "answer": "Dot notation is more concise but only works for column names that are valid Python identifiers. Square brackets work for any column name and allow for variable column names.",
                 "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], '2B': [4, 5, 6]})\n# How would you select column '2B'?",
-                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], '2B': [4, 5, 6]})\nprint(df['2B'])  # This works\n# df.2B  # This would raise a SyntaxError"
+                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], '2B': [4, 5, 6]})\nprint(df['2B'])  # This works\n# df.2B  # This would raise a SyntaxError",
+                "questionType": "technical"
               }
             ],
             "codeExample": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})\nprint(df.A)  # Using dot notation\nprint(df['B'])  # Using square brackets\ncolumn_name = 'C'\nprint(df[column_name])  # Using a variable"
@@ -260,13 +286,15 @@
                 "question": "What is a pandas Series?",
                 "answer": "A pandas Series is a one-dimensional labeled array capable of holding data of any type.",
                 "questionCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\n# What will this print?\nprint(type(s))",
-                "answerCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nprint(type(s))  # This will print: <class 'pandas.core.series.Series'>"
+                "answerCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nprint(type(s))  # This will print: <class 'pandas.core.series.Series'>",
+                "questionType": "technical"
               },
               {
                 "question": "How can you calculate the mean of a Series?",
                 "answer": "You can use the 'mean()' method on a Series to calculate its mean.",
                 "questionCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\n# How would you calculate the mean of this Series?",
-                "answerCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nprint(s.mean())  # This will print: 3.0"
+                "answerCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nprint(s.mean())  # This will print: 3.0",
+                "questionType": "technical"
               }
             ],
             "codeExample": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nprint(f'Mean: {s.mean()}')\nprint(f'Median: {s.median()}')\nprint(f'Standard Deviation: {s.std()}')\nprint(f'Value Counts:\\n{s.value_counts()}')"
@@ -279,13 +307,15 @@
                 "question": "How can you add a constant to every element in a Series?",
                 "answer": "You can add a constant to a Series by simply using the '+' operator with the Series and the constant.",
                 "questionCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\n# How would you add 10 to every element in this Series?",
-                "answerCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nresult = s + 10\nprint(result)"
+                "answerCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nresult = s + 10\nprint(result)",
+                "questionType": "technical"
               },
               {
                 "question": "How can you perform element-wise operations between two Series?",
                 "answer": "You can perform element-wise operations between two Series of the same length using arithmetic operators.",
                 "questionCode": "import pandas as pd\n\ns1 = pd.Series([1, 2, 3, 4, 5])\ns2 = pd.Series([10, 20, 30, 40, 50])\n# How would you multiply these two Series element-wise?",
-                "answerCode": "import pandas as pd\n\ns1 = pd.Series([1, 2, 3, 4, 5])\ns2 = pd.Series([10, 20, 30, 40, 50])\nresult = s1 * s2\nprint(result)"
+                "answerCode": "import pandas as pd\n\ns1 = pd.Series([1, 2, 3, 4, 5])\ns2 = pd.Series([10, 20, 30, 40, 50])\nresult = s1 * s2\nprint(result)",
+                "questionType": "technical"
               }
             ],
             "codeExample": "import pandas as pd\n\ns1 = pd.Series([1, 2, 3, 4, 5])\ns2 = pd.Series([10, 20, 30, 40, 50])\nprint(f'Addition: {s1 + s2}')\nprint(f'Subtraction: {s2 - s1}')\nprint(f'Multiplication: {s1 * s2}')\nprint(f'Division: {s2 / s1}')"
@@ -298,13 +328,15 @@
                 "question": "What is method chaining in pandas?",
                 "answer": "Method chaining is the practice of applying multiple methods to a Series or DataFrame in a single line of code, where each method call is chained to the previous one.",
                 "questionCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\n# How would you chain methods to add 10 to each element, then calculate the mean?",
-                "answerCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nresult = (s + 10).mean()\nprint(result)  # This will print: 13.0"
+                "answerCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nresult = (s + 10).mean()\nprint(result)  # This will print: 13.0",
+                "questionType": "technical"
               },
               {
                 "question": "What is the benefit of method chaining?",
                 "answer": "Method chaining can make code more readable and concise by eliminating the need for intermediate variables.",
                 "questionCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\n# Write a chain of methods to add 10, multiply by 2, then get the maximum value",
-                "answerCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nresult = ((s + 10) * 2).max()\nprint(result)  # This will print: 30"
+                "answerCode": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nresult = ((s + 10) * 2).max()\nprint(result)  # This will print: 30",
+                "questionType": "technical"
               }
             ],
             "codeExample": "import pandas as pd\n\ns = pd.Series([1, 2, 3, 4, 5])\nresult = (s\n          .add(10)\n          .mul(2)\n          .div(5)\n          .subtract(1)\n          .mean())\nprint(f'Result of chained operations: {result}')"
@@ -317,13 +349,15 @@
                 "question": "How can you rename a single column in a DataFrame?",
                 "answer": "You can use the 'rename()' method with a dictionary mapping old names to new names.",
                 "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\n# How would you rename column 'A' to 'Alpha'?",
-                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\ndf = df.rename(columns={'A': 'Alpha'})\nprint(df)"
+                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\ndf = df.rename(columns={'A': 'Alpha'})\nprint(df)",
+                "questionType": "technical"
               },
               {
                 "question": "How can you rename all columns at once?",
                 "answer": "You can assign a new list of names directly to the 'columns' attribute of the DataFrame.",
                 "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\n# How would you rename all columns to ['X', 'Y']?",
-                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\ndf.columns = ['X', 'Y']\nprint(df)"
+                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\ndf.columns = ['X', 'Y']\nprint(df)",
+                "questionType": "technical"
               }
             ],
             "codeExample": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\n\n# Rename a single column\ndf = df.rename(columns={'A': 'Alpha'})\n\n# Rename using a function\ndf = df.rename(columns=str.lower)\n\n# Rename all columns\ndf.columns = ['X', 'Y']\n\nprint(df)"
@@ -336,13 +370,15 @@
                 "question": "How can you add a new column to a DataFrame?",
                 "answer": "You can add a new column by assigning a Series or list to a new column name.",
                 "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\n# How would you add a new column 'C' with values [7, 8, 9]?",
-                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\ndf['C'] = [7, 8, 9]\nprint(df)"
+                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\ndf['C'] = [7, 8, 9]\nprint(df)",
+                "questionType": "technical"
               },
               {
                 "question": "How can you delete a column from a DataFrame?",
                 "answer": "You can use the 'drop()' method to remove a column, specifying the column name and axis=1 for columns.",
                 "questionCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})\n# How would you delete column 'B'?",
-                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})\ndf = df.drop('B', axis=1)\nprint(df)"
+                "answerCode": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})\ndf = df.drop('B', axis=1)\nprint(df)",
+                "questionType": "technical"
               }
             ],
             "codeExample": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\n\n# Add a new column\ndf['C'] = df['A'] + df['B']\n\n# Add a column with a single value\ndf['D'] = 10\n\n# Delete a column\ndf = df.drop('B', axis=1)\n\nprint(df)"
@@ -366,7 +402,8 @@
                 "question": "Maxwell's Equations Q1?",
                 "answer": "Maxwell's Equations A1",
                 "questionCode": "// Regular function\nfunction greet(name) {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\n// Arrow function\nconst greetArrow = (name) => {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\nconst person = { title: 'Mr.' };\ngreet.call(person, 'John');\ngreetArrow.call(person, 'John');",
-                "answerCode": "// Output:\n// Hello, Mr. John\n// Hello, undefined John\n\n// The regular function's 'this' is set to the 'person' object\n// The arrow function's 'this' remains the global object (or undefined in strict mode)"
+                "answerCode": "// Output:\n// Hello, Mr. John\n// Hello, undefined John\n\n// The regular function's 'this' is set to the 'person' object\n// The arrow function's 'this' remains the global object (or undefined in strict mode)",
+                "questionType": "technical"
               }
             ],
             "codeExample": "// Regular function\nfunction add(a, b) {\n  return a + b;\n}\n\n// Arrow function\nconst multiply = (a, b) => a * b;\n\nconsole.log(add(2, 3));\nconsole.log(multiply(4, 5));"
@@ -390,7 +427,8 @@
                 "question": "Maxwell's Equations Q1?",
                 "answer": "Maxwell's Equations A1",
                 "questionCode": "// Regular function\nfunction greet(name) {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\n// Arrow function\nconst greetArrow = (name) => {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\nconst person = { title: 'Mr.' };\ngreet.call(person, 'John');\ngreetArrow.call(person, 'John');",
-                "answerCode": "// Output:\n// Hello, Mr. John\n// Hello, undefined John\n\n// The regular function's 'this' is set to the 'person' object\n// The arrow function's 'this' remains the global object (or undefined in strict mode)"
+                "answerCode": "// Output:\n// Hello, Mr. John\n// Hello, undefined John\n\n// The regular function's 'this' is set to the 'person' object\n// The arrow function's 'this' remains the global object (or undefined in strict mode)",
+                "questionType": "technical"
               }
             ],
             "codeExample": "// Regular function\nfunction add(a, b) {\n  return a + b;\n}\n\n// Arrow function\nconst multiply = (a, b) => a * b;\n\nconsole.log(add(2, 3));\nconsole.log(multiply(4, 5));"
@@ -414,7 +452,8 @@
                 "question": "Maxwell's Equations Q1?",
                 "answer": "Maxwell's Equations A1",
                 "questionCode": "// Regular function\nfunction greet(name) {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\n// Arrow function\nconst greetArrow = (name) => {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\nconst person = { title: 'Mr.' };\ngreet.call(person, 'John');\ngreetArrow.call(person, 'John');",
-                "answerCode": "// Output:\n// Hello, Mr. John\n// Hello, undefined John\n\n// The regular function's 'this' is set to the 'person' object\n// The arrow function's 'this' remains the global object (or undefined in strict mode)"
+                "answerCode": "// Output:\n// Hello, Mr. John\n// Hello, undefined John\n\n// The regular function's 'this' is set to the 'person' object\n// The arrow function's 'this' remains the global object (or undefined in strict mode)",
+                "questionType": "technical"
               }
             ],
             "codeExample": "// Regular function\nfunction add(a, b) {\n  return a + b;\n}\n\n// Arrow function\nconst multiply = (a, b) => a * b;\n\nconsole.log(add(2, 3));\nconsole.log(multiply(4, 5));"
@@ -433,7 +472,8 @@
                 "question": "Maxwell's Equations Q1?",
                 "answer": "Maxwell's Equations A1",
                 "questionCode": "// Regular function\nfunction greet(name) {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\n// Arrow function\nconst greetArrow = (name) => {\n  console.log('Hello, ' + this.title + ' ' + name);\n}\n\nconst person = { title: 'Mr.' };\ngreet.call(person, 'John');\ngreetArrow.call(person, 'John');",
-                "answerCode": "// Output:\n// Hello, Mr. John\n// Hello, undefined John\n\n// The regular function's 'this' is set to the 'person' object\n// The arrow function's 'this' remains the global object (or undefined in strict mode)"
+                "answerCode": "// Output:\n// Hello, Mr. John\n// Hello, undefined John\n\n// The regular function's 'this' is set to the 'person' object\n// The arrow function's 'this' remains the global object (or undefined in strict mode)",
+                "questionType": "technical"
               }
             ],
             "codeExample": "// Regular function\nfunction add(a, b) {\n  return a + b;\n}\n\n// Arrow function\nconst multiply = (a, b) => a * b;\n\nconsole.log(add(2, 3));\nconsole.log(multiply(4, 5));"
@@ -441,5 +481,358 @@
         ]
       }
     ]
-  }
+  },
+  {
+  "name": "Machine Learning",
+  "topics": [
+    {
+      "name": "Supervised Learning",
+      "details": "Learning algorithms that use labeled training data",
+      "concepts": [
+        {
+          "name": "Linear Regression",
+          "details": "A linear approach to modeling the relationship between a dependent variable and one or more independent variables",
+          "questions": [
+            {
+              "question": "What is the main goal of linear regression?",
+              "answer": "The main goal of linear regression is to find the best-fitting straight line through the points in a dataset, minimizing the difference between predicted and actual values.",
+              "questionType": "general"
+            },
+            {
+              "question": "What is the difference between simple linear regression and multiple linear regression?",
+              "answer": "Simple linear regression involves one independent variable, while multiple linear regression involves two or more independent variables.",
+              "questionType": "general"
+            },
+            {
+              "question": "How is the performance of a linear regression model typically evaluated?",
+              "answer": "Linear regression models are typically evaluated using metrics such as Mean Squared Error (MSE), Root Mean Squared Error (RMSE), R-squared (R²), and Mean Absolute Error (MAE).",
+              "questionType": "general"
+            }
+          ],
+          "codeExample": "import numpy as np\nfrom sklearn.linear_model import LinearRegression\n\nX = np.array([[1], [2], [3], [4], [5]])\ny = np.array([2, 4, 5, 4, 5])\n\nmodel = LinearRegression()\nmodel.fit(X, y)\n\nprint(f'Coefficient: {model.coef_[0]}')\nprint(f'Intercept: {model.intercept_}')"
+        },
+        {
+          "name": "Logistic Regression",
+          "details": "A statistical method for predicting binary outcomes",
+          "questions": [
+            {
+              "question": "What type of problems is logistic regression typically used for?",
+              "answer": "Logistic regression is typically used for binary classification problems, where the goal is to predict one of two possible outcomes.",
+              "questionType": "general"
+            },
+            {
+              "question": "What is the sigmoid function and why is it important in logistic regression?",
+              "answer": "The sigmoid function is used to transform the output of the linear combination of features into a probability between 0 and 1. It's important because it allows logistic regression to model probabilities for binary outcomes.",
+              "questionType": "general"
+            },
+            {
+              "question": "How does logistic regression differ from linear regression?",
+              "answer": "Logistic regression predicts the probability of an instance belonging to a particular class, while linear regression predicts a continuous numeric value. Logistic regression uses the sigmoid function to map predictions to probabilities, while linear regression does not.",
+              "questionType": "general"
+            }
+          ],
+          "codeExample": "from sklearn.linear_model import LogisticRegression\nfrom sklearn.datasets import make_classification\n\nX, y = make_classification(n_samples=100, n_features=2, n_informative=2, n_redundant=0, n_classes=2, random_state=42)\n\nmodel = LogisticRegression()\nmodel.fit(X, y)\n\nprint(f'Coefficients: {model.coef_}')\nprint(f'Intercept: {model.intercept_}')"
+        },
+        {
+          "name": "Decision Trees",
+          "details": "A tree-like model of decisions and their possible consequences",
+          "questions": [
+            {
+              "question": "What are the main components of a decision tree?",
+              "answer": "The main components of a decision tree are the root node, internal nodes, branches, and leaf nodes. The root node represents the entire dataset, internal nodes represent features, branches represent decision rules, and leaf nodes represent the final output or decision.",
+              "questionType": "general"
+            },
+            {
+              "question": "What are some advantages of using decision trees?",
+              "answer": "Advantages of decision trees include easy interpretability, ability to handle both numerical and categorical data, minimal data preparation required, and the ability to capture non-linear relationships.",
+              "questionType": "general"
+            },
+            {
+              "question": "What is the concept of entropy in decision trees?",
+              "answer": "Entropy in decision trees is a measure of impurity or uncertainty in a set of examples. It is used to determine the best feature to split on at each node of the tree. Lower entropy indicates a more homogeneous set of examples.",
+              "questionType": "general"
+            }
+          ],
+          "codeExample": "from sklearn.tree import DecisionTreeClassifier\nfrom sklearn.datasets import load_iris\n\niris = load_iris()\nX, y = iris.data, iris.target\n\nmodel = DecisionTreeClassifier(random_state=42)\nmodel.fit(X, y)\n\nprint(f'Feature importances: {model.feature_importances_}')"
+        },
+        {
+          "name": "Support Vector Machines (SVM)",
+          "details": "A supervised learning algorithm used for classification and regression tasks",
+          "questions": [
+            {
+              "question": "What is the main idea behind Support Vector Machines?",
+              "answer": "The main idea behind SVMs is to find the hyperplane that best separates different classes in the feature space, maximizing the margin between the classes.",
+              "questionType": "general"
+            },
+            {
+              "question": "What is the kernel trick in SVM?",
+              "answer": "The kernel trick is a method used in SVMs to transform the input data into a higher-dimensional space without explicitly computing the coordinates in that space. This allows SVMs to find non-linear decision boundaries in the original input space.",
+              "questionType": "general"
+            },
+            {
+              "question": "What are support vectors in SVM?",
+              "answer": "Support vectors are the data points that lie closest to the decision boundary (hyperplane) and influence its position and orientation. These points are critical for defining the margin of the classifier.",
+              "questionType": "general"
+            }
+          ],
+          "codeExample": "from sklearn.svm import SVC\nfrom sklearn.datasets import make_classification\n\nX, y = make_classification(n_samples=100, n_features=2, n_informative=2, n_redundant=0, n_classes=2, random_state=42)\n\nmodel = SVC(kernel='rbf')\nmodel.fit(X, y)\n\nprint(f'Number of support vectors: {model.n_support_}')"
+        },
+        {
+          "name": "K-Nearest Neighbors (KNN)",
+          "details": "A non-parametric method used for classification and regression",
+          "questions": [
+            {
+              "question": "How does the K-Nearest Neighbors algorithm work?",
+              "answer": "KNN works by finding the K nearest data points to a given query point in the feature space. For classification, it assigns the majority class of these K neighbors to the query point. For regression, it typically averages the values of the K neighbors.",
+              "questionType": "general"
+            },
+            {
+              "question": "What is the significance of the 'K' value in KNN?",
+              "answer": "The 'K' value in KNN determines the number of nearest neighbors to consider when making a prediction. A smaller K can lead to more flexible decision boundaries but may be sensitive to noise, while a larger K can provide smoother decision boundaries but may overlook local patterns.",
+              "questionType": "general"
+            },
+            {
+              "question": "What are some advantages and disadvantages of KNN?",
+              "answer": "Advantages of KNN include simplicity, effectiveness in many cases, and no assumptions about data distribution. Disadvantages include computational cost for large datasets, sensitivity to irrelevant features, and the need to choose an appropriate K value.",
+              "questionType": "general"
+            }
+          ],
+          "codeExample": "from sklearn.neighbors import KNeighborsClassifier\nfrom sklearn.datasets import load_iris\n\niris = load_iris()\nX, y = iris.data, iris.target\n\nmodel = KNeighborsClassifier(n_neighbors=3)\nmodel.fit(X, y)\n\nprint(f'Model score: {model.score(X, y)}')"
+        }
+      ]
+    },
+    {
+      "name": "Unsupervised Learning",
+      "details": "Learning algorithms that work on unlabeled data",
+      "concepts": [
+        {
+          "name": "K-Means Clustering",
+          "details": "A method of vector quantization for cluster analysis",
+          "questions": [
+            {
+              "question": "What is the main objective of K-Means clustering?",
+              "answer": "The main objective of K-Means clustering is to partition n observations into k clusters, where each observation belongs to the cluster with the nearest mean (cluster centroid).",
+              "questionType": "general"
+            },
+            {
+              "question": "How does the K-Means algorithm work?",
+              "answer": "K-Means works by iteratively assigning data points to the nearest centroid, then updating the centroids based on the mean of the assigned points. This process continues until the centroids stabilize or a maximum number of iterations is reached.",
+              "questionType": "general"
+            },
+            {
+              "question": "What is the 'elbow method' in K-Means clustering?",
+              "answer": "The elbow method is a technique used to determine the optimal number of clusters (K) for K-Means. It involves plotting the within-cluster sum of squares (WCSS) against different K values and looking for the 'elbow' point where the rate of decrease sharply shifts.",
+              "questionType": "general"
+            }
+          ],
+          "codeExample": "from sklearn.cluster import KMeans\nfrom sklearn.datasets import make_blobs\n\nX, _ = make_blobs(n_samples=300, centers=4, cluster_std=0.60, random_state=0)\n\nkmeans = KMeans(n_clusters=4)\nkmeans.fit(X)\n\nprint(f'Cluster centers: {kmeans.cluster_centers_}')"
+        },
+        {
+          "name": "Hierarchical Clustering",
+          "details": "A method of cluster analysis which seeks to build a hierarchy of clusters",
+          "questions": [
+            {
+              "question": "What are the two main types of hierarchical clustering?",
+              "answer": "The two main types of hierarchical clustering are agglomerative (bottom-up approach) and divisive (top-down approach). Agglomerative clustering starts with individual data points and merges them, while divisive clustering starts with all points in one cluster and recursively divides them.",
+              "questionType": "general"
+            },
+            {
+              "question": "What is a dendrogram in hierarchical clustering?",
+              "answer": "A dendrogram is a tree-like diagram that shows the hierarchical relationship between objects in hierarchical clustering. It illustrates how clusters are formed and merged (or split) at each step of the clustering process.",
+              "questionType": "general"
+            },
+            {
+              "question": "What are some common linkage methods used in hierarchical clustering?",
+              "answer": "Common linkage methods in hierarchical clustering include single linkage (nearest neighbor), complete linkage (farthest neighbor), average linkage, and Ward's method. These methods determine how the distance between clusters is calculated during the merging process.",
+              "questionType": "general"
+            }
+          ],
+          "codeExample": "from scipy.cluster.hierarchy import dendrogram, linkage\nimport matplotlib.pyplot as plt\nimport numpy as np\n\nX = np.random.rand(10, 2)\nlinked = linkage(X, 'single')\n\ndendrogram(linked)\nplt.show()"
+        },
+        {
+          "name": "Principal Component Analysis (PCA)",
+          "details": "A statistical procedure that uses an orthogonal transformation to convert a set of observations of possibly correlated variables into a set of values of linearly uncorrelated variables",
+          "questions": [
+            {
+              "question": "What is the main purpose of PCA?",
+              "answer": "The main purpose of PCA is dimensionality reduction. It aims to find the directions (principal components) that maximize the variance in a dataset and project the data onto a lower-dimensional subspace while preserving as much information as possible.",
+              "questionType": "general"
+            },
+            {
+              "question": "How are principal components ordered in PCA?",
+              "answer": "Principal components in PCA are ordered by the amount of variance they explain in the data. The first principal component explains the most variance, the second explains the second most, and so on.",
+              "questionType": "general"
+            },
+            {
+              "question": "What is the relationship between eigenvalues and principal components in PCA?",
+              "answer": "In PCA, eigenvalues correspond to the amount of variance explained by each principal component. The eigenvector associated with the largest eigenvalue is the first principal component, the eigenvector with the second largest eigenvalue is the second principal component, and so on.",
+              "questionType": "general"
+            }
+          ],
+          "codeExample": "from sklearn.decomposition import PCA\nfrom sklearn.datasets import load_iris\n\niris = load_iris()\nX = iris.data\n\npca = PCA(n_components=2)\nX_reduced = pca.fit_transform(X)\n\nprint(f'Explained variance ratio: {pca.explained_variance_ratio_}')"
+        },
+        {
+          "name": "Gaussian Mixture Models (GMM)",
+          "details": "A probabilistic model that assumes all the data points are generated from a mixture of a finite number of Gaussian distributions with unknown parameters",
+          "questions": [
+            {
+              "question": "What is the main difference between K-Means and Gaussian Mixture Models?",
+              "answer": "While K-Means assigns each data point to a single cluster, GMM is a probabilistic model that assigns each data point a probability of belonging to each cluster. GMM can capture more complex cluster shapes and allows for soft clustering.",
+              "questionType": "general"
+            },
+            {
+              "question": "What is the Expectation-Maximization (EM) algorithm in the context of GMM?",
+              "answer": "The EM algorithm is used to estimate the parameters of a Gaussian Mixture Model. It iteratively performs two steps: the Expectation step (E-step) which calculates the probability of each point belonging to each Gaussian, and the Maximization step (M-step) which updates the parameters of the Gaussians.",
+              "questionType": "general"
+            },
+            {
+              "question": "How can you determine the optimal number of components in a GMM?",
+              "answer": "The optimal number of components in a GMM can be determined using methods such as the Bayesian Information Criterion (BIC), Akaike Information Criterion (AIC), or by using cross-validation to evaluate models with different numbers of components.",
+              "questionType": "general"
+            }
+          ],
+          "codeExample": "from sklearn.mixture import GaussianMixture\nfrom sklearn.datasets import make_blobs\n\nX, _ = make_blobs(n_samples=300, centers=4, cluster_std=0.60, random_state=0)\n\ngmm = GaussianMixture(n_components=4, random_state=0)\ngmm.fit(X)\n\nprint(f'Means: {gmm.means_}')\nprint(f'Covariances: {gmm.covariances_}')"
+        },
+        {
+          "name": "Anomaly Detection",
+          "details": "The identification of rare items, events or observations which raise suspicions by differing significantly from the majority of the data",
+          "questions": [
+            {
+              "question": "What is the main goal of anomaly detection?",
+              "answer": "The main goal of anomaly detection is to identify data points, events, or patterns that do not conform to expected behavior. These anomalies could indicate errors, fraud, or other significant events of interest.",
+              "questionType": "general"
+            },
+            {
+              "question": "What are some common techniques used for anomaly detection?",
+              "answer": "Common techniques for anomaly detection include statistical methods (e.g., Z-score, Interquartile Range), machine learning approaches (e.g., Isolation Forest, One-Class SVM), and density-based methods (e.g., Local Outlier Factor).",
+              "questionType": "general"
+            },
+            {
+              "question": "What is the difference between supervised and unsupervised anomaly detection?",
+              "answer": "Supervised anomaly detection requires labeled data with examples of both normal and anomalous instances for training. Unsupervised anomaly detection does not require labeled data and attempts to identify anomalies based on the inherent properties of the data.",
+              "questionType": "general"
+            }
+          ],
+          "codeExample": "from sklearn.ensemble import IsolationForest\nimport numpy as np\n\nX = np.random.randn(100, 2)\nX[0] = [5, 5]  # Anomaly\n\nclf = IsolationForest(contamination=0.1, random_state=0)\noutlier_labels = clf.fit_predict(X)\n\nprint(f'Outlier labels: {outlier_labels}')"
+        }
+      ]
+    },
+    {
+      "name": "Deep Learning",
+      "details": "Machine learning techniques based on artificial neural networks",
+      "concepts": [
+        {
+          "name": "Neural Networks",
+          "details": "Computing systems inspired by the biological neural networks that constitute animal brains",
+          "questions": [
+            {
+              "question": "What are the basic components of a neural network?",
+              "answer": "The basic components of a neural network are neurons (nodes), connections (edges) with associated weights, activation functions, and layers (input layer, hidden layers, and output layer).",
+              "questionType": "general"
+            },
+            {
+              "question": "What is backpropagation in neural networks?",
+              "answer": "Backpropagation is an algorithm used to train neural networks by calculating the gradient of the loss function with respect to each weight. It propagates the error backwards through the network to adjust the weights and minimize the loss.",
+              "questionType": "general"
+            },
+            {
+              "question": "What is the purpose of activation functions in neural networks?",
+              "answer": "Activation functions introduce non-linearity into neural networks, allowing them to learn complex patterns. They determine the output of a neuron given an input or set of inputs, and help the network make decisions or classifications.",
+              "questionType": "general"
+            }
+          ],
+          "codeExample": "import tensorflow as tf\n\nmodel = tf.keras.Sequential([\n    tf.keras.layers.Dense(64, activation='relu', input_shape=(10,)),\n    tf.keras.layers.Dense(32, activation='relu'),\n    tf.keras.layers.Dense(1, activation='sigmoid')\n])\n\nmodel.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])\nprint(model.summary())"
+        },
+        {
+          "name": "Convolutional Neural Networks (CNN)",
+          "details": "A class of deep neural networks, most commonly applied to analyzing visual imagery",
+          "questions": [
+            {
+              "question": "What are the main components of a Convolutional Neural Network?",
+              "answer": "The main components of a CNN are convolutional layers, pooling layers, and fully connected layers. Convolutional layers apply filters to detect features, pooling layers reduce spatial dimensions, and fully connected layers perform classification based on the extracted features.",
+              "questionType": "general"
+            },
+            {
+              "question": "What is the purpose of pooling layers in CNNs?",
+              "answer": "Pooling layers in CNNs serve to progressively reduce the spatial size of the representation, reducing the number of parameters and computation in the network. This helps to control overfitting and makes the network invariant to small translations in the input.",
+              "questionType": "general"
+            },
+            {
+              "question": "How do CNNs differ from fully connected neural networks in image processing tasks?",
+              "answer": "CNNs are specifically designed for processing grid-like data such as images. They use local connectivity and weight sharing, which allows them to efficiently capture spatial hierarchies in images. This makes them more suitable for image-related tasks compared to fully connected networks, which don't have these built-in assumptions about the data structure.",
+              "questionType": "general"
+            }
+          ],
+          "codeExample": "import tensorflow as tf\n\nmodel = tf.keras.Sequential([\n    tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(28, 28, 1)),\n    tf.keras.layers.MaxPooling2D((2, 2)),\n    tf.keras.layers.Flatten(),\n    tf.keras.layers.Dense(64, activation='relu'),\n    tf.keras.layers.Dense(10, activation='softmax')\n])\n\nmodel.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])\nprint(model.summary())"
+        },
+        {
+          "name": "Recurrent Neural Networks (RNN)",
+          "details": "A class of neural networks where connections between nodes form a directed graph along a temporal sequence",
+          "questions": [
+            {
+              "question": "What is the main characteristic of Recurrent Neural Networks?",
+              "answer": "The main characteristic of RNNs is their ability to process sequential data by maintaining an internal state (memory) that captures information about previous inputs. This allows them to exhibit temporal dynamic behavior and makes them suitable for tasks involving time series or sequential data.",
+              "questionType": "general"
+            },
+            {
+              "question": "What is the vanishing gradient problem in RNNs?",
+              "answer": "The vanishing gradient problem in RNNs occurs when gradients become extremely small as they are backpropagated through time, making it difficult for the network to learn long-term dependencies. This problem arises due to repeated multiplication of small values during backpropagation through time.",
+              "questionType": "general"
+            },
+            {
+              "question": "How do Long Short-Term Memory (LSTM) networks address the limitations of standard RNNs?",
+              "answer": "LSTM networks address the vanishing gradient problem of standard RNNs by introducing a memory cell and gating mechanisms. The memory cell can maintain information over long periods, while the gates control the flow of information into and out of the cell, allowing the network to learn long-term dependencies more effectively.",
+              "questionType": "general"
+            }
+          ],
+          "codeExample": "import tensorflow as tf\n\nmodel = tf.keras.Sequential([\n    tf.keras.layers.Embedding(input_dim=10000, output_dim=32),\n    tf.keras.layers.LSTM(64, return_sequences=True),\n    tf.keras.layers.LSTM(32),\n    tf.keras.layers.Dense(1, activation='sigmoid')\n])\n\nmodel.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])\nprint(model.summary())"
+        },
+        {
+          "name": "Generative Adversarial Networks (GAN)",
+          "details": "A class of machine learning frameworks where two neural networks contest with each other in a game",
+          "questions": [
+            {
+              "question": "What are the two main components of a Generative Adversarial Network?",
+              "answer": "The two main components of a GAN are the Generator and the Discriminator. The Generator creates synthetic data samples, while the Discriminator tries to distinguish between real and generated samples. These two networks are trained simultaneously in an adversarial process.",
+              "questionType": "general"
+            },
+            {
+              "question": "What is the goal of the Generator in a GAN?",
+              "answer": "The goal of the Generator in a GAN is to produce synthetic data samples that are indistinguishable from real data. It aims to generate samples that can fool the Discriminator into classifying them as real.",
+              "questionType": "general"
+            },
+            {
+              "question": "What are some applications of GANs?",
+              "answer": "GANs have various applications, including image generation, image-to-image translation, text-to-image synthesis, super-resolution, data augmentation, and even in fields like drug discovery and astronomy for generating synthetic data.",
+              "questionType": "general"
+            }
+          ],
+          "codeExample": "import tensorflow as tf\n\ndef make_generator_model():\n    model = tf.keras.Sequential([\n        tf.keras.layers.Dense(7*7*256, use_bias=False, input_shape=(100,)),\n        tf.keras.layers.BatchNormalization(),\n        tf.keras.layers.LeakyReLU(),\n        tf.keras.layers.Reshape((7, 7, 256)),\n        tf.keras.layers.Conv2DTranspose(128, (5, 5), strides=(1, 1), padding='same', use_bias=False),\n        tf.keras.layers.BatchNormalization(),\n        tf.keras.layers.LeakyReLU(),\n        tf.keras.layers.Conv2DTranspose(64, (5, 5), strides=(2, 2), padding='same', use_bias=False),\n        tf.keras.layers.BatchNormalization(),\n        tf.keras.layers.LeakyReLU(),\n        tf.keras.layers.Conv2DTranspose(1, (5, 5), strides=(2, 2), padding='same', use_bias=False, activation='tanh')\n    ])\n    return model\n\nprint(make_generator_model().summary())"
+        },
+        {
+          "name": "Transfer Learning",
+          "details": "A machine learning method where a model developed for a task is reused as the starting point for a model on a second task",
+          "questions": [
+            {
+              "question": "What is the main advantage of transfer learning?",
+              "answer": "The main advantage of transfer learning is that it allows models to leverage knowledge gained from one task to improve performance on a related task, often with less training data and computation time. This is particularly useful when there's limited labeled data available for the target task.",
+              "questionType": "general"
+            },
+            {
+              "question": "What is fine-tuning in the context of transfer learning?",
+              "answer": "Fine-tuning in transfer learning refers to the process of taking a pre-trained model and further training it on a new, related task. This usually involves freezing some layers of the pre-trained model and training only the last few layers on the new data, allowing the model to adapt to the specific characteristics of the new task.",
+              "questionType": "general"
+            },
+            {
+              "question": "In what scenarios is transfer learning particularly useful?",
+              "answer": "Transfer learning is particularly useful when there's limited labeled data for the target task, when the target task is similar to the source task, when there's a need to reduce training time and computational resources, and when leveraging knowledge from a related domain can improve model performance.",
+              "questionType": "general"
+            }
+          ],
+          "codeExample": "import tensorflow as tf\n\nbase_model = tf.keras.applications.MobileNetV2(input_shape=(224, 224, 3),\n                                               include_top=False,\n                                               weights='imagenet')\nbase_model.trainable = False\n\nmodel = tf.keras.Sequential([\n    base_model,\n    tf.keras.layers.GlobalAveragePooling2D(),\n    tf.keras.layers.Dense(1, activation='sigmoid')\n])\n\nmodel.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])\nprint(model.summary())"
+        }
+      ]
+    }
+  ]
+}
 ]

@@ -28,6 +28,7 @@ interface Question {
   concept?: string;
   hint?: string;
   type?: 'technical' | 'competency';
+  question_type?: 'technical' | 'competency' | 'general';
 }
 
 interface Concept {
@@ -168,7 +169,7 @@ export function InterviewSimulation() {
   const [userCodeAnswer, setUserCodeAnswer] = useState('')
   const [isTextSubmitted, setIsTextSubmitted] = useState(false)
   const [isCodeSubmitted, setIsCodeSubmitted] = useState(false)
-  const [questionType, setQuestionType] = useState<'all' | 'technical' | 'competency'>('all')
+  const [questionType, setQuestionType] = useState<'all' | 'technical' | 'general' | 'competency'>('all')
   const [feedback, setFeedback] = useState<FeedbackItem[]>([])
   const [activeTab, setActiveTab] = useState<string>('interview')
   const [codeOutput, setCodeOutput] = useState('')
@@ -221,11 +222,11 @@ export function InterviewSimulation() {
 
   const filteredQuestions = useMemo(() => {
     return questions.filter(q => 
-      (appliedFilters.questionType === 'all' || q.type === appliedFilters.questionType) &&
+      (questionType === 'all' || q.question_type === questionType) &&
       (appliedFilters.subject === 'all' || q.subject === appliedFilters.subject) &&
       (appliedFilters.topic === 'all' || q.topic === appliedFilters.topic)
     );
-  }, [questions, appliedFilters])
+  }, [questions, questionType, appliedFilters])
 
   const topics = useMemo(() => {
     if (selectedSubject === 'all') return [];
@@ -255,7 +256,7 @@ export function InterviewSimulation() {
     setAppliedFilters(newFilters);
 
     const newFilteredQuestions = questions.filter(q => 
-      (newFilters.questionType === 'all' || q.type === newFilters.questionType) &&
+      (newFilters.questionType === 'all' || q.question_type === newFilters.questionType) &&
       (newFilters.subject === 'all' || q.subject === newFilters.subject) &&
       (newFilters.topic === 'all' || q.topic === newFilters.topic)
     );
@@ -376,6 +377,14 @@ export function InterviewSimulation() {
         </Breadcrumb>
       </div>
 
+      {/* Question Type Display */}
+      {currentQuestion && (
+        <div className="mb-4">
+          <span className="font-bold">Question Type: </span>
+          <span className="capitalize">{currentQuestion.question_type || 'Not specified'}</span>
+        </div>
+      )}
+
       {/* Filters */}
       <div className="mb-4 flex space-x-4">
         <Select value={questionType} onValueChange={(value: any) => setQuestionType(value)}>
@@ -385,6 +394,7 @@ export function InterviewSimulation() {
           <SelectContent>
             <SelectItem value="all">All Questions</SelectItem>
             <SelectItem value="technical">Technical</SelectItem>
+            <SelectItem value="general">General</SelectItem>
             <SelectItem value="competency">Competency</SelectItem>
           </SelectContent>
         </Select>

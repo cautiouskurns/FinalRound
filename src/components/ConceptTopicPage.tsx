@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Concept, Topic, Question } from './components-syllabus';
 import { Button } from "@/components/ui/button";
@@ -239,22 +239,26 @@ function CodeExamples({ concept }: { concept: Concept }) {
 
 function QuestionTable({ concept, searchQuery }: { concept: Concept, searchQuery: string }) {
   const [questions, setQuestions] = useState<Question[]>(() => {
-    console.log('Initial questions:', (concept as any).questions);
-    return (concept as any).questions || [];
+    console.log('Initial questions:', concept.questions);
+    return concept.questions || [];
   });
+
+  const filteredQuestions = useMemo(() => {
+    return questions.filter(q =>
+      q.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      q.answer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      q.question_type.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [questions, searchQuery]);
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  const filteredQuestions = questions.filter(q => 
-    q.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    q.answer.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   console.log('Filtered questions:', filteredQuestions);
 
   const openAddDialog = () => {
-    setEditingQuestion({ question: '', answer: '' });
+    setEditingQuestion({ question: '', answer: '', question_type: 'technical' });
     setEditingIndex(null);
     setIsDialogOpen(true);
   };
@@ -291,28 +295,19 @@ function QuestionTable({ concept, searchQuery }: { concept: Concept, searchQuery
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[40%]">Question</TableHead>
-            <TableHead className="w-[40%]">Answer</TableHead>
-            <TableHead className="w-[20%]">Action</TableHead>
+            <TableHead>Question</TableHead>
+            <TableHead>Answer</TableHead>
+            <TableHead>Type</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredQuestions.length > 0 ? (
-            filteredQuestions.map((q, index) => (
-              <TableRow key={index}>
-                <TableCell>{q.question}</TableCell>
-                <TableCell>{q.answer}</TableCell>
-                <TableCell>
-                  <Button onClick={() => openEditDialog(q, index)} variant="outline" size="sm" className="mr-2">Edit</Button>
-                  <Button onClick={() => removeQuestion(index)} variant="destructive" size="sm">Remove</Button>
-                </TableCell>
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={3} className="text-center">No questions found</TableCell>
+          {filteredQuestions.map((question, index) => (
+            <TableRow key={index}>
+              <TableCell>{question.question}</TableCell>
+              <TableCell>{question.answer}</TableCell>
+              <TableCell>{question.question_type}</TableCell>
             </TableRow>
-          )}
+          ))}
           <TableRow>
             <TableCell colSpan={3}>
               <Button onClick={openAddDialog} variant="outline" size="sm" className="w-full">Add Question</Button>

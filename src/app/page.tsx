@@ -18,13 +18,14 @@ import { UserList } from '@/components/UserList'
 import AdvancedInterviewSimulation from '@/components/advanced-interview-simulation'
 import ConvaiTest from '@/components/ConvaiTest'
 import { ConceptTest } from '@/components/ConceptTest'  // Add this import
+import LandingPage from '@/components/LandingPage'  // Add this import
 
 // Remove or comment out these lines:
 // const HomePage = () => <div>Home Page Content</div>
 // const SettingsPage = () => <div>Settings Page Content</div>
 
 export default function Page() {
-  const [activeTab, setActiveTab] = useState<'home' | 'interview' | 'syllabus' | 'settings' | 'dashboard' | 'speechToText' | 'addUser' | 'convaiTest' | 'conceptTest'>('home')  // Add 'conceptTest' to the union type
+  const [activeTab, setActiveTab] = useState<'landing' | 'home' | 'interview' | 'syllabus' | 'settings' | 'dashboard' | 'speechToText' | 'addUser' | 'convaiTest' | 'conceptTest'>('landing')  // Set default to 'landing'
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -33,6 +34,16 @@ export default function Page() {
       <div className="flex-1 flex">
         <aside className="w-64 border-r">
           <nav className="grid items-start gap-2 px-4 py-4">
+            <Link
+              href="#"
+              onClick={() => setActiveTab('landing')}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition-all hover:text-primary 
+                ${activeTab === 'landing' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
+            >
+              <HomeIcon className="h-4 w-4" />
+              Landing
+            </Link>
+
             <Link
               href="#"
               onClick={() => setActiveTab('home')}
@@ -125,7 +136,8 @@ export default function Page() {
           </nav>
         </aside>
 
-        <main className="flex-1 p-6">
+        <main className="flex-1">
+          {activeTab === 'landing' && <LandingPage />}
           {activeTab === 'home' && <Home />}
           {activeTab === 'interview' && <InterviewSimulation />}
           {activeTab === 'syllabus' && <Syllabus />}
@@ -140,7 +152,7 @@ export default function Page() {
             </>
           )}
           {activeTab === 'convaiTest' && <ConvaiTest />}
-          {activeTab === 'conceptTest' && <ConceptTest />}  {/* Add this line */}
+          {activeTab === 'conceptTest' && <ConceptTest />}
         </main>
       </div>
     </div>

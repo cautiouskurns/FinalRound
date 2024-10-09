@@ -1,0 +1,94 @@
+.landingPageWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #1e2337;
+  color: white;
+  width: 100%;
+  overflow: hidden; /* This will prevent any content from spilling out */
+}
+
+.landingPage {
+  width: 100%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.header {
+  text-align: center;
+  padding: 4rem 0;
+  width: 100%;
+}
+
+.header h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.header p {
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto 1rem;
+}
+
+.ctaButton {
+  display: inline-block;
+  background-color: #ff3366;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.ctaButton:hover {
+  background-color: #ff1f59;
+}
+
+.featureSection {
+  width: 100%;
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.featureSection h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.featureSection p {
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.lightBg {
+  background-color: #f3f4f6;
+  color: #1e2337;
+}
+
+.darkBg {
+  background-color: #1e2337;
+  color: white;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem 0;
+  background-color: #1e2337;
+  color: white;
+  width: 100%;
+}

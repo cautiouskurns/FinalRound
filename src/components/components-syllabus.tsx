@@ -8,6 +8,7 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { motion, AnimatePresence } from 'framer-motion'
 import { ConceptTopicPage } from './ConceptTopicPage';
+import { Link } from 'next/link';
 
 export interface Concept {
   id: number;
@@ -198,4 +199,20 @@ export function Syllabus() {
       )}
     </motion.div>
   )
+}
+
+export function Navigation() {
+  return (
+    <nav>
+      <ul>
+        <li>
+          <Link href="/">Home</Link>
+        </li>
+        <li>
+          <Link href="/syllabus">Syllabus</Link>
+        </li>
+        {/* ... (other navigation items) */}
+      </ul>
+    </nav>
+  );
 }
