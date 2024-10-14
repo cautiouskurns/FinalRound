@@ -2,10 +2,14 @@ import React from 'react';
 import Link from 'next/link';
 import { Zap } from 'lucide-react'
 
-export function Header() {
+interface HeaderProps {
+  onLogoClick: () => void;
+}
+
+export function Header({ onLogoClick }: HeaderProps) {
   return (
-    <header className="flex items-center justify-between h-16 px-6 bg-[#1e2337] text-white">
-      <div className="flex items-center gap-4">
+    <header className="flex items-center justify-between h-16 px-6 border-b shrink-0 bg-[#1e2337] text-white">
+      <div className="flex items-center gap-4 cursor-pointer" onClick={onLogoClick}>
         <Zap className="h-6 w-6 text-[#ff3366]" />
         <span className="text-xl font-semibold">FinalRound</span>
       </div>
@@ -13,18 +17,18 @@ export function Header() {
         <ul className="flex justify-center space-x-8">
           <li className="relative group">
             <span className="cursor-pointer hover:text-gray-300">Features</span>
-            <ul className="absolute hidden group-hover:block bg-[#1e2337] text-white mt-2 py-2 w-48 rounded-md shadow-lg">
-              <li><Link href="/features/interview-prep" className="block px-4 py-2 hover:bg-[#2a305e]">Interview Prep</Link></li>
-              <li><Link href="/features/coding-challenges" className="block px-4 py-2 hover:bg-[#2a305e]">Coding Challenges</Link></li>
-              <li><Link href="/features/mock-interviews" className="block px-4 py-2 hover:bg-[#2a305e]">Mock Interviews</Link></li>
+            <ul className="absolute hidden group-hover:block bg-[#252b45] text-white mt-2 py-2 w-48 rounded-md shadow-lg">
+              <li><Link href="/features/interview-prep" className="block px-4 py-2 hover:bg-[#2f3655]">Interview Prep</Link></li>
+              <li><Link href="/features/coding-challenges" className="block px-4 py-2 hover:bg-[#2f3655]">Coding Challenges</Link></li>
+              <li><Link href="/features/mock-interviews" className="block px-4 py-2 hover:bg-[#2f3655]">Mock Interviews</Link></li>
             </ul>
           </li>
           <li className="relative group">
             <span className="cursor-pointer hover:text-gray-300">Solutions</span>
-            <ul className="absolute hidden group-hover:block bg-[#1e2337] text-white mt-2 py-2 w-48 rounded-md shadow-lg">
-              <li><Link href="/solutions/for-individuals" className="block px-4 py-2 hover:bg-[#2a305e]">For Individuals</Link></li>
-              <li><Link href="/solutions/for-teams" className="block px-4 py-2 hover:bg-[#2a305e]">For Teams</Link></li>
-              <li><Link href="/solutions/for-enterprises" className="block px-4 py-2 hover:bg-[#2a305e]">For Enterprises</Link></li>
+            <ul className="absolute hidden group-hover:block bg-[#252b45] text-white mt-2 py-2 w-48 rounded-md shadow-lg">
+              <li><Link href="/solutions/for-individuals" className="block px-4 py-2 hover:bg-[#2f3655]">For Individuals</Link></li>
+              <li><Link href="/solutions/for-teams" className="block px-4 py-2 hover:bg-[#2f3655]">For Teams</Link></li>
+              <li><Link href="/solutions/for-enterprises" className="block px-4 py-2 hover:bg-[#2f3655]">For Enterprises</Link></li>
             </ul>
           </li>
           <li><Link href="/resources" className="hover:text-gray-300">Resources</Link></li>

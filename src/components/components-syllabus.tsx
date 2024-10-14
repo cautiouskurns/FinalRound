@@ -97,107 +97,109 @@ export function Syllabus() {
   const selectedSubjectData = syllabusData.find((subject: Subject) => subject.name === selectedSubject)
 
   return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="container mx-auto"
-    >
-      <h2 className="text-2xl font-bold mb-4">Interview Syllabus</h2>
-      <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-        <SelectTrigger className="w-[180px] mb-4">
-          <SelectValue placeholder="Select a subject" />
-        </SelectTrigger>
-        <SelectContent>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            {syllabusData.map((subject: Subject) => (
-              <SelectItem key={subject.name} value={subject.name}>
-                {subject.name}
-              </SelectItem>
-            ))}
-          </motion.div>
-        </SelectContent>
-      </Select>
-      <div className="grid grid-cols-12 gap-4 font-semibold mb-2 border-b pb-2">
-        <div className="col-span-3 text-lg">Topic</div>
-        <div className="col-span-3 text-lg">Concept</div>
-        <div className="col-span-6 text-lg">Details</div>
-      </div>
-      <div className="space-y-2">
-        <AnimatePresence>
-          {selectedSubjectData && selectedSubjectData.topics.map((topic: Topic) => (
-            <motion.div 
-              key={topic.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-2"
+    <>
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="container mx-auto"
+      >
+        <h2 className="text-2xl font-bold mb-4">Interview Syllabus</h2>
+        <Select value={selectedSubject} onValueChange={setSelectedSubject}>
+          <SelectTrigger className="w-[180px] mb-4">
+            <SelectValue placeholder="Select a subject" />
+          </SelectTrigger>
+          <SelectContent>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              <div className="grid grid-cols-12 gap-4 items-start py-2 border-b">
-                <div className="col-span-3 flex items-center">
-                  <Button
-                    variant="ghost"
-                    onClick={() => toggleTopic(topic.name)}
-                    className="p-1 mr-2"
-                  >
-                    {expandedTopics.has(topic.name) ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    onClick={() => navigateToTopicPage(topic)}
-                    className="p-0 text-base font-semibold"
-                  >
-                    {topic.name}
-                  </Button>
-                </div>
-                <div className="col-span-3"></div>
-                <div className="col-span-6 text-base">{topic.details}</div>
-              </div>
-              <AnimatePresence>
-                {expandedTopics.has(topic.name) && topic.concepts.map(concept => (
-                  <motion.div
-                    key={concept.name}
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="space-y-2 ml-4"
-                  >
-                    <div className="grid grid-cols-12 gap-4 items-start py-2 border-b">
-                      <div className="col-span-3"></div>
-                      <div className="col-span-3">
-                        <Button
-                          variant="ghost"
-                          onClick={() => navigateToConceptPage(concept)}
-                          className="p-0 text-base font-semibold"
-                        >
-                          {concept.name}
-                        </Button>
-                      </div>
-                      <div className="col-span-6 text-base">
-                        <p>{concept.details}</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
+              {syllabusData.map((subject: Subject) => (
+                <SelectItem key={subject.name} value={subject.name}>
+                  {subject.name}
+                </SelectItem>
+              ))}
             </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
+          </SelectContent>
+        </Select>
+        <div className="grid grid-cols-12 gap-4 font-semibold mb-2 border-b pb-2">
+          <div className="col-span-3 text-lg">Topic</div>
+          <div className="col-span-3 text-lg">Concept</div>
+          <div className="col-span-6 text-lg">Details</div>
+        </div>
+        <div className="space-y-2">
+          <AnimatePresence>
+            {selectedSubjectData && selectedSubjectData.topics.map((topic: Topic) => (
+              <motion.div 
+                key={topic.name}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-2"
+              >
+                <div className="grid grid-cols-12 gap-4 items-start py-2 border-b">
+                  <div className="col-span-3 flex items-center">
+                    <Button
+                      variant="ghost"
+                      onClick={() => toggleTopic(topic.name)}
+                      className="p-1 mr-2"
+                    >
+                      {expandedTopics.has(topic.name) ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      onClick={() => navigateToTopicPage(topic)}
+                      className="p-0 text-base font-semibold"
+                    >
+                      {topic.name}
+                    </Button>
+                  </div>
+                  <div className="col-span-3"></div>
+                  <div className="col-span-6 text-base">{topic.details}</div>
+                </div>
+                <AnimatePresence>
+                  {expandedTopics.has(topic.name) && topic.concepts.map(concept => (
+                    <motion.div
+                      key={concept.name}
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="space-y-2 ml-4"
+                    >
+                      <div className="grid grid-cols-12 gap-4 items-start py-2 border-b">
+                        <div className="col-span-3"></div>
+                        <div className="col-span-3">
+                          <Button
+                            variant="ghost"
+                            onClick={() => navigateToConceptPage(concept)}
+                            className="p-0 text-base font-semibold"
+                          >
+                            {concept.name}
+                          </Button>
+                        </div>
+                        <div className="col-span-6 text-base">
+                          <p>{concept.details}</p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+      </motion.div>
       {selectedItem && (
         <ConceptTopicPage
           item={selectedItem}
           onClose={() => setSelectedItem(null)}
-          onBack={() => setSelectedItem(null)} // Add the onBack prop here
+          onBack={() => setSelectedItem(null)}
         />
       )}
-    </motion.div>
+    </>
   )
 }
 
